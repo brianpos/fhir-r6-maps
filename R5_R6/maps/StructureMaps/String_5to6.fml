@@ -1,0 +1,14 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/string5to6'
+/// name = 'string5to6'
+/// title = 'string Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/string" alias stringR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/string" alias stringR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group String(source src : stringR5, target tgt : stringR6) extends PrimitiveType <<type+>> {
+  src.value -> tgt.value;
+}

@@ -1,0 +1,25 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/TriggerDefinition5to6'
+/// name = 'TriggerDefinition5to6'
+/// title = 'TriggerDefinition Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/TriggerDefinition" alias TriggerDefinitionR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/TriggerDefinition" alias TriggerDefinitionR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group TriggerDefinition(source src : TriggerDefinitionR5, target tgt : TriggerDefinitionR6) extends DataType <<type+>> {
+  src.type -> tgt.type;
+  src.name -> tgt.name;
+  src.code -> tgt.code;
+  src.subscriptionTopic -> tgt.subscriptionTopic;
+  src.timing : Timing -> tgt.timing;
+  src.timing : date -> tgt.timing;
+  src.timing : dateTime -> tgt.timing;
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-TriggerDefinition.timing[x]') -> tgt.timing = (e.value) "xverTimingReference";
+// rule changed to Timing,Reference,date,dateTime -> Timing,date,dateTime
+// src.timing -> tgt.timing; // Warning: Source Type unsupported: Reference  (Timing,Reference,date,dateTime -> Timing,date,dateTime)
+  src.data -> tgt.data;
+  src.condition -> tgt.condition;
+}

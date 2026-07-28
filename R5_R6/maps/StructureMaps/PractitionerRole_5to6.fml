@@ -1,0 +1,29 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/PractitionerRole5to6'
+/// name = 'PractitionerRole5to6'
+/// title = 'PractitionerRole Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/PractitionerRole" alias PractitionerRoleR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/PractitionerRole" alias PractitionerRoleR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following target properties were not populated:
+    PractitionerRole.display string[0..1]
+*/
+group PractitionerRole(source src : PractitionerRoleR5, target tgt : PractitionerRoleR6) extends DomainResource <<type+>> {
+  src.identifier -> tgt.identifier;
+  src.active -> tgt.active;
+  src.period -> tgt.period;
+  src.practitioner -> tgt.practitioner;
+  src.organization -> tgt.organization;
+  src.code -> tgt.code;
+  src.specialty -> tgt.specialty;
+  src.location -> tgt.location;
+  src.healthcareService -> tgt.healthcareService;
+  src.contact -> tgt.contact;
+  src.characteristic -> tgt.characteristic;
+  src.communication -> tgt.communication;
+  src.availability /* [0..*] */ -> tgt.availability /* [0..1] */; // Warning: source repeating, target single-valued
+  src.endpoint -> tgt.endpoint;
+}

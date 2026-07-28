@@ -1,0 +1,17 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/MonetaryComponent5to6'
+/// name = 'MonetaryComponent5to6'
+/// title = 'MonetaryComponent Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/MonetaryComponent" alias MonetaryComponentR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/MonetaryComponent" alias MonetaryComponentR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group MonetaryComponent(source src : MonetaryComponentR5, target tgt : MonetaryComponentR6) extends DataType <<type+>> {
+  src.type -> tgt.type;
+  src.code -> tgt.code;
+  src.factor -> tgt.factor;
+  src.amount -> tgt.amount;
+}

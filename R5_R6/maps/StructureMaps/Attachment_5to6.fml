@@ -1,0 +1,26 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/Attachment5to6'
+/// name = 'Attachment5to6'
+/// title = 'Attachment Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/Attachment" alias AttachmentR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/Attachment" alias AttachmentR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group Attachment(source src : AttachmentR5, target tgt : AttachmentR6) extends DataType <<type+>> {
+  src.contentType -> tgt.contentType;
+  src.language -> tgt.language;
+  src.data -> tgt.data;
+  src.url -> tgt.url;
+  src.size -> tgt.size;
+  src.hash -> tgt.hash;
+  src.title -> tgt.title;
+  src.creation -> tgt.creation;
+  src.height -> tgt.height;
+  src.width -> tgt.width;
+  src.frames -> tgt.frames;
+  src.duration -> tgt.duration;
+  src.pages -> tgt.pages;
+}

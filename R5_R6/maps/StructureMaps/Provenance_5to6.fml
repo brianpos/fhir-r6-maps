@@ -1,0 +1,45 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/Provenance5to6'
+/// name = 'Provenance5to6'
+/// title = 'Provenance Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/Provenance" alias ProvenanceR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/Provenance" alias ProvenanceR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following target properties were not populated:
+    Provenance.why markdown[0..1]
+*/
+group Provenance(source src : ProvenanceR5, target tgt : ProvenanceR6) extends DomainResource <<type+>> {
+  src.target -> tgt.target;
+  src.occurred -> tgt.occurred;
+  src.recorded -> tgt.recorded;
+  src.policy -> tgt.policy;
+  src.location -> tgt.location;
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-Provenance.authorization') -> tgt.authorization = (e.value) "xverAuthorizationCodeableReference";
+// rule changed to CodeableReference -> CodeableConcept
+// src.authorization -> tgt.authorization; // Warning: Source Type unsupported: CodeableReference  (CodeableReference -> CodeableConcept)
+  src.activity -> tgt.activity;
+  src.basedOn -> tgt.basedOn; // Warning: Source TargetProfile unsupported: CarePlan,DeviceRequest,ImmunizationRecommendation,MedicationRequest,NutritionOrder,ServiceRequest,Task  (CarePlan,DeviceRequest,ImmunizationRecommendation,MedicationRequest,NutritionOrder,ServiceRequest,Task -> Resource)
+  src.patient -> tgt.patient;
+  src.encounter -> tgt.encounter;
+  src.agent as s -> tgt.agent as t then ProvenanceAgent(s, t);
+  src.entity as s -> tgt.entity as t then ProvenanceEntity(s, t);
+  src.signature -> tgt.signature;
+}
+
+
+group ProvenanceAgent(source src, target tgt) extends BackboneElement {
+  src.type -> tgt.type;
+  src.role -> tgt.role;
+  src.who -> tgt.who;
+  src.onBehalfOf -> tgt.onBehalfOf;
+}
+
+
+group ProvenanceEntity(source src, target tgt) extends BackboneElement {
+  src.role -> tgt.role;
+  src.what -> tgt.what;
+  src.agent as s -> tgt.agent as t then ProvenanceAgent(s, t);
+}

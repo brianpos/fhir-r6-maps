@@ -1,0 +1,14 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/BackboneType5to6'
+/// name = 'BackboneType5to6'
+/// title = 'BackboneType Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/BackboneType" alias BackboneTypeR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/BackboneType" alias BackboneTypeR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group BackboneType(source src : BackboneTypeR5, target tgt : BackboneTypeR6) extends DataType <<type+>> {
+  src.modifierExtension where (url.startsWith('http://hl7.org/fhir/6.0/StructureDefinition/extension-').not()) -> tgt.modifierExtension;
+}

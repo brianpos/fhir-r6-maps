@@ -1,0 +1,16 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/Annotation5to6'
+/// name = 'Annotation5to6'
+/// title = 'Annotation Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/Annotation" alias AnnotationR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/Annotation" alias AnnotationR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group Annotation(source src : AnnotationR5, target tgt : AnnotationR6) extends DataType <<type+>> {
+  src.author -> tgt.author;
+  src.time -> tgt.time;
+  src.text -> tgt.text;
+}

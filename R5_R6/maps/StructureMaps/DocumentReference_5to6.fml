@@ -1,0 +1,64 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/DocumentReference5to6'
+/// name = 'DocumentReference5to6'
+/// title = 'DocumentReference Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/DocumentReference" alias DocumentReferenceR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/DocumentReference" alias DocumentReferenceR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following target properties were not populated:
+    DocumentReference.related BackboneElement[0..*]
+    DocumentReference.related.code CodeableConcept[0..1]
+    DocumentReference.related.target Reference[1..1] (Resource)
+*/
+group DocumentReference(source src : DocumentReferenceR5, target tgt : DocumentReferenceR6) extends DomainResource <<type+>> {
+  src.identifier -> tgt.identifier;
+  src.version -> tgt.version;
+  src.basedOn -> tgt.basedOn; // Warning: Source TargetProfile unsupported: Contract,EnrollmentRequest,ImmunizationRecommendation,SupplyRequest  (Appointment,AppointmentResponse,CarePlan,Claim,CommunicationRequest,Contract,CoverageEligibilityRequest,DeviceRequest,EnrollmentRequest,ImmunizationRecommendation,MedicationRequest,NutritionOrder,RequestOrchestration,ServiceRequest,SupplyRequest,VisionPrescription -> Appointment,AppointmentResponse,CarePlan,Claim,CommunicationRequest,CoverageEligibilityRequest,DeviceRequest,MedicationRequest,NutritionOrder,RequestOrchestration,ServiceRequest,VisionPrescription)
+  src.status -> tgt.status;
+  src.docStatus -> tgt.docStatus;
+  src.modality -> tgt.modality;
+  src.type -> tgt.type;
+  src.category -> tgt.category;
+  src.subject -> tgt.subject;
+  src.context -> tgt.context;
+  src.event -> tgt.event;
+  src.bodySite -> tgt.bodyStructure; // renamed
+  src.facilityType -> tgt.facilityType;
+  src.practiceSetting -> tgt.practiceSetting;
+  src.period -> tgt.period;
+  src.date -> tgt.date;
+  src.author -> tgt.author;
+  src.attester as s -> tgt.attester as t then DocumentReferenceAttester(s, t);
+  src.custodian -> tgt.custodian;
+  src.relatesTo as s -> tgt.relatesTo as t then DocumentReferenceRelatesTo(s, t);
+  src.description -> tgt.description;
+  src.securityLabel -> tgt.securityLabel;
+  src.content as s -> tgt.content as t then DocumentReferenceContent(s, t);
+}
+
+
+group DocumentReferenceAttester(source src, target tgt) extends BackboneElement {
+  src.mode -> tgt.mode;
+  src.time -> tgt.time;
+  src.party -> tgt.party;
+}
+
+
+group DocumentReferenceRelatesTo(source src, target tgt) extends BackboneElement {
+  src.code -> tgt.code;
+  src.target -> tgt.target;
+}
+
+
+group DocumentReferenceContent(source src, target tgt) extends BackboneElement {
+  src.attachment -> tgt.attachment;
+  src.profile as s -> tgt.profile as t then DocumentReferenceContentProfile(s, t);
+}
+
+
+group DocumentReferenceContentProfile(source src, target tgt) extends BackboneElement {
+  src.value -> tgt.value;
+}

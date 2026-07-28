@@ -1,0 +1,13 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/id5to6'
+/// name = 'id5to6'
+/// title = 'id Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/id" alias idR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/id" alias idR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group Id(source src : idR5, target tgt : idR6) extends String <<type+>> {
+}

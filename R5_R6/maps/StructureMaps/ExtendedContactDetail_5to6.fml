@@ -1,0 +1,19 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/ExtendedContactDetail5to6'
+/// name = 'ExtendedContactDetail5to6'
+/// title = 'ExtendedContactDetail Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/ExtendedContactDetail" alias ExtendedContactDetailR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/ExtendedContactDetail" alias ExtendedContactDetailR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group ExtendedContactDetail(source src : ExtendedContactDetailR5, target tgt : ExtendedContactDetailR6) extends DataType <<type+>> {
+  src.purpose -> tgt.purpose;
+  src.name -> tgt.name;
+  src.telecom -> tgt.telecom;
+  src.address -> tgt.address;
+  src.organization -> tgt.organization;
+  src.period -> tgt.period;
+}

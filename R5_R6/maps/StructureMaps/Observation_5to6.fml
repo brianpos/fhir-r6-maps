@@ -1,0 +1,102 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/Observation5to6'
+/// name = 'Observation5to6'
+/// title = 'Observation Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/Observation" alias ObservationR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/Observation" alias ObservationR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following source properties were not read:
+    Observation.instantiates[x] canonical,Reference[0..1] (ObservationDefinition,ObservationDefinition)
+*/
+/* The following target properties were not populated:
+    Observation.statusReason CodeableConcept[0..1]
+    Observation.organizer boolean[0..1]
+    Observation.context CodeableReference[0..*] (Resource)
+    Observation.supportingDevice CodeableReference[0..*] (Device)
+*/
+group Observation(source src : ObservationR5, target tgt : ObservationR6) extends DomainResource <<type+>> {
+  src.identifier -> tgt.identifier;
+  src.basedOn -> tgt.basedOn; // Warning: Source TargetProfile unsupported: ImmunizationRecommendation  (CarePlan,DeviceRequest,ImmunizationRecommendation,MedicationRequest,NutritionOrder,ServiceRequest -> CarePlan,DeviceRequest,MedicationRequest,NutritionOrder,ServiceRequest)
+  src.triggeredBy as s -> tgt.triggeredBy as t then ObservationTriggeredBy(s, t);
+  src.partOf -> tgt.partOf; // Warning: Source TargetProfile unsupported: GenomicStudy  (MedicationAdministration,MedicationDispense,MedicationStatement,Procedure,Immunization,ImagingStudy,GenomicStudy -> MedicationAdministration,MedicationDispense,MedicationStatement,Procedure,Immunization,ImagingStudy)
+  src.status -> tgt.status;
+  src.category -> tgt.category;
+  src.code -> tgt.code;
+  src.subject -> tgt.subject;
+  src.focus -> tgt.focus;
+  src.encounter -> tgt.encounter;
+  src.effective -> tgt.effective;
+  src.issued -> tgt.issued;
+  src.performer -> tgt.performer;
+  src.value : Quantity -> tgt.value;
+  src.value : CodeableConcept -> tgt.value;
+  src.value : string -> tgt.value;
+  src.value : boolean -> tgt.value;
+  src.value : integer -> tgt.value;
+  src.value : Range -> tgt.value;
+  src.value : Ratio -> tgt.value;
+  src.value : SampledData -> tgt.value;
+  src.value : time -> tgt.value;
+  src.value : dateTime -> tgt.value;
+  src.value : Period -> tgt.value;
+  src.value : Attachment -> tgt.value;
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-Observation.value[x]') -> tgt.value = (e.value) "xverValueReference";
+// rule changed to Quantity,CodeableConcept,string,boolean,integer,Range,Ratio,SampledData,time,dateTime,Period,Attachment,Reference -> Quantity,CodeableConcept,string,boolean,integer,Range,Ratio,SampledData,time,dateTime,Period,Attachment
+// src.value -> tgt.value; // Warning: Source Type unsupported: Reference  (Quantity,CodeableConcept,string,boolean,integer,Range,Ratio,SampledData,time,dateTime,Period,Attachment,Reference -> Quantity,CodeableConcept,string,boolean,integer,Range,Ratio,SampledData,time,dateTime,Period,Attachment)
+  src.dataAbsentReason -> tgt.dataAbsentReason;
+  src.interpretation -> tgt.interpretation;
+  src.note -> tgt.note;
+  src.bodySite -> tgt.bodySite;
+  src.bodyStructure -> tgt.bodyStructure;
+  src.method -> tgt.method;
+  src.specimen -> tgt.specimen;
+  src.device -> tgt.device;
+  src.referenceRange as s -> tgt.referenceRange as t then ObservationReferenceRange(s, t);
+  src.hasMember -> tgt.hasMember; // Warning: Source TargetProfile unsupported: MolecularSequence  (Observation,QuestionnaireResponse,MolecularSequence -> Observation,QuestionnaireResponse)
+  src.derivedFrom -> tgt.derivedFrom; // Warning: Source TargetProfile unsupported: MolecularSequence,GenomicStudy  (DocumentReference,ImagingStudy,ImagingSelection,QuestionnaireResponse,Observation,MolecularSequence,GenomicStudy -> DocumentReference,ImagingStudy,ImagingSelection,QuestionnaireResponse,Observation)
+  src.component as s -> tgt.component as t then ObservationComponent(s, t);
+}
+
+
+group ObservationTriggeredBy(source src, target tgt) extends BackboneElement {
+  src.observation -> tgt.observation;
+  src.type -> tgt.type;
+  src.reason -> tgt.reason;
+}
+
+
+group ObservationReferenceRange(source src, target tgt) extends BackboneElement {
+  src.low -> tgt.low;
+  src.high -> tgt.high;
+  src.normalValue -> tgt.normalValue;
+  src.type -> tgt.type;
+  src.appliesTo -> tgt.appliesTo;
+  src.age -> tgt.age;
+  src.text -> tgt.text;
+}
+
+
+group ObservationComponent(source src, target tgt) extends BackboneElement {
+  src.code -> tgt.code;
+  src.value : Quantity -> tgt.value;
+  src.value : CodeableConcept -> tgt.value;
+  src.value : string -> tgt.value;
+  src.value : boolean -> tgt.value;
+  src.value : integer -> tgt.value;
+  src.value : Range -> tgt.value;
+  src.value : Ratio -> tgt.value;
+  src.value : SampledData -> tgt.value;
+  src.value : time -> tgt.value;
+  src.value : dateTime -> tgt.value;
+  src.value : Period -> tgt.value;
+  src.value : Attachment -> tgt.value;
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-Observation.component.value[x]') -> tgt.value = (e.value) "xverValueReference";
+// rule changed to Quantity,CodeableConcept,string,boolean,integer,Range,Ratio,SampledData,time,dateTime,Period,Attachment,Reference -> Quantity,CodeableConcept,string,boolean,integer,Range,Ratio,SampledData,time,dateTime,Period,Attachment
+// src.value -> tgt.value; // Warning: Source Type unsupported: Reference  (Quantity,CodeableConcept,string,boolean,integer,Range,Ratio,SampledData,time,dateTime,Period,Attachment,Reference -> Quantity,CodeableConcept,string,boolean,integer,Range,Ratio,SampledData,time,dateTime,Period,Attachment)
+  src.dataAbsentReason -> tgt.dataAbsentReason;
+  src.interpretation -> tgt.interpretation;
+  src.referenceRange as s -> tgt.referenceRange as t then ObservationReferenceRange(s, t);
+}

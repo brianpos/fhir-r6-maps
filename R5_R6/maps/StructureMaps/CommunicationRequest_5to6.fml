@@ -1,0 +1,40 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/CommunicationRequest5to6'
+/// name = 'CommunicationRequest5to6'
+/// title = 'CommunicationRequest Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/CommunicationRequest" alias CommunicationRequestR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/CommunicationRequest" alias CommunicationRequestR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group CommunicationRequest(source src : CommunicationRequestR5, target tgt : CommunicationRequestR6) extends DomainResource <<type+>> {
+  src.identifier -> tgt.identifier;
+  src.basedOn -> tgt.basedOn;
+  src.replaces -> tgt.replaces;
+  src.groupIdentifier -> tgt.groupIdentifier;
+  src.status -> tgt.status;
+  src.statusReason -> tgt.statusReason;
+  src.intent -> tgt.intent;
+  src.category -> tgt.category;
+  src.priority -> tgt.priority;
+  src.doNotPerform -> tgt.doNotPerform;
+  src.medium -> tgt.medium;
+  src.subject -> tgt.subject;
+  src.about -> tgt.about;
+  src.encounter -> tgt.encounter;
+  src.payload as s -> tgt.payload as t then CommunicationRequestPayload(s, t);
+  src.occurrence -> tgt.occurrence;
+  src.authoredOn -> tgt.authoredOn;
+  src.requester -> tgt.requester;
+  src.recipient -> tgt.recipient;
+  src.informationProvider -> tgt.informationProvider;
+  src.reason -> tgt.reason;
+  src.note -> tgt.note;
+}
+
+
+group CommunicationRequestPayload(source src, target tgt) extends BackboneElement {
+  src.content -> tgt.content;
+}

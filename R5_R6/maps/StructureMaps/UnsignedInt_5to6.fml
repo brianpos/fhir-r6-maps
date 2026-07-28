@@ -1,0 +1,13 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/unsignedInt5to6'
+/// name = 'unsignedInt5to6'
+/// title = 'unsignedInt Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/unsignedInt" alias unsignedIntR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/unsignedInt" alias unsignedIntR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group UnsignedInt(source src : unsignedIntR5, target tgt : unsignedIntR6) extends Integer <<type+>> {
+}

@@ -1,0 +1,160 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/PlanDefinition5to6'
+/// name = 'PlanDefinition5to6'
+/// title = 'PlanDefinition Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/PlanDefinition" alias PlanDefinitionR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/PlanDefinition" alias PlanDefinitionR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following target properties were not populated:
+    PlanDefinition.action.applicabilityBehavior code[0..1]
+*/
+group PlanDefinition(source src : PlanDefinitionR5, target tgt : PlanDefinitionR6) extends DomainResource <<type+>> {
+  src.url -> tgt.url;
+  src.identifier -> tgt.identifier;
+  src.version -> tgt.version;
+  src.versionAlgorithm -> tgt.versionAlgorithm;
+  src.name -> tgt.name;
+  src.title -> tgt.title;
+  src.subtitle -> tgt.subtitle;
+  src.type -> tgt.type;
+  src.status -> tgt.status;
+  src.experimental -> tgt.experimental;
+  src.subject -> tgt.subject;
+  src.date -> tgt.date;
+  src.publisher -> tgt.publisher;
+  src.contact -> tgt.contact;
+  src.description -> tgt.description;
+  src.useContext -> tgt.useContext;
+  src.jurisdiction -> tgt.jurisdiction;
+  src.purpose -> tgt.purpose;
+  src.usage -> tgt.usage;
+  src.copyright -> tgt.copyright;
+  src.copyrightLabel -> tgt.copyrightLabel;
+  src.approvalDate -> tgt.approvalDate;
+  src.lastReviewDate -> tgt.lastReviewDate;
+  src.effectivePeriod -> tgt.effectivePeriod;
+  src.topic -> tgt.topic;
+  src.author -> tgt.author;
+  src.editor -> tgt.editor;
+  src.reviewer -> tgt.reviewer;
+  src.endorser -> tgt.endorser;
+  src.relatedArtifact -> tgt.relatedArtifact;
+  src.library -> tgt.library;
+  src.goal as s -> tgt.goal as t then PlanDefinitionGoal(s, t);
+  src.actor as s -> tgt.actor as t then PlanDefinitionActor(s, t);
+  src.action as s -> tgt.action as t then PlanDefinitionAction(s, t);
+  src.asNeeded -> tgt.asNeeded;
+}
+
+
+group PlanDefinitionGoal(source src, target tgt) extends BackboneElement {
+  src.category -> tgt.category;
+  src.description -> tgt.description;
+  src.priority -> tgt.priority;
+  src.start -> tgt.start;
+  src.addresses -> tgt.addresses;
+  src.documentation -> tgt.documentation;
+  src.target as s -> tgt.target as t then PlanDefinitionGoalTarget(s, t);
+}
+
+
+group PlanDefinitionGoalTarget(source src, target tgt) extends BackboneElement {
+  src.measure -> tgt.measure;
+  src.detail -> tgt.detail;
+  src.due -> tgt.due;
+}
+
+
+group PlanDefinitionActor(source src, target tgt) extends BackboneElement {
+  src.title -> tgt.title;
+  src.description -> tgt.description;
+  src.option as s -> tgt.option as t then PlanDefinitionActorOption(s, t);
+}
+
+
+group PlanDefinitionActorOption(source src, target tgt) extends BackboneElement {
+  src.type -> tgt.type;
+  src.typeCanonical -> tgt.typeCanonical;
+  src.typeReference -> tgt.typeReference; // Warning: Source TargetProfile unsupported: DeviceDefinition,Group  (CareTeam,Device,DeviceDefinition,Endpoint,Group,HealthcareService,Location,Organization,Patient,Practitioner,PractitionerRole,RelatedPerson -> BiologicallyDerivedProduct,CareTeam,Device,Endpoint,HealthcareService,Location,Medication,MedicinalProductDefinition,Organization,Patient,Practitioner,PractitionerRole,RelatedPerson,Specimen,Substance,SubstanceDefinition)
+  src.role -> tgt.role;
+}
+
+
+group PlanDefinitionAction(source src, target tgt) extends BackboneElement {
+  src.linkId -> tgt.linkId;
+  src.prefix -> tgt.prefix;
+  src.title -> tgt.title;
+  src.description -> tgt.description;
+  src.textEquivalent -> tgt.textEquivalent;
+  src.priority -> tgt.priority;
+  src.code -> tgt.code;
+  src.reason -> tgt.reason;
+  src.documentation -> tgt.documentation;
+  src.goalId -> tgt.goalId;
+  src.subject -> tgt.subject;
+  src.trigger -> tgt.trigger;
+  src.condition as s -> tgt.condition as t then PlanDefinitionActionCondition(s, t);
+  src.input as s -> tgt.input as t then PlanDefinitionActionInput(s, t);
+  src.output as s -> tgt.output as t then PlanDefinitionActionOutput(s, t);
+  src.relatedAction as s -> tgt.relatedAction as t then PlanDefinitionActionRelatedAction(s, t);
+  src.timing -> tgt.timing;
+  src.location -> tgt.location;
+  src.participant as s -> tgt.participant as t then PlanDefinitionActionParticipant(s, t);
+  src.type -> tgt.type;
+  src.groupingBehavior -> tgt.groupingBehavior;
+  src.selectionBehavior -> tgt.selectionBehavior;
+  src.requiredBehavior -> tgt.requiredBehavior;
+  src.precheckBehavior -> tgt.precheckBehavior;
+  src.cardinalityBehavior -> tgt.cardinalityBehavior;
+  src.definition -> tgt.definition;
+  src.transform -> tgt.transform;
+  src.dynamicValue as s -> tgt.dynamicValue as t then PlanDefinitionActionDynamicValue(s, t);
+  src.action as s -> tgt.action as t then PlanDefinitionAction(s, t);
+}
+
+
+group PlanDefinitionActionCondition(source src, target tgt) extends BackboneElement {
+  src.kind -> tgt.kind;
+  src.expression -> tgt.expression;
+}
+
+
+group PlanDefinitionActionInput(source src, target tgt) extends BackboneElement {
+  src.title -> tgt.title;
+  src.requirement -> tgt.requirement;
+  src.relatedData -> tgt.relatedData;
+}
+
+
+group PlanDefinitionActionOutput(source src, target tgt) extends BackboneElement {
+  src.title -> tgt.title;
+  src.requirement -> tgt.requirement;
+  src.relatedData -> tgt.relatedData;
+}
+
+
+group PlanDefinitionActionRelatedAction(source src, target tgt) extends BackboneElement {
+  src.targetId -> tgt.targetId;
+  src.relationship -> tgt.relationship;
+  src.endRelationship -> tgt.endRelationship;
+  src.offset -> tgt.offset;
+}
+
+
+group PlanDefinitionActionParticipant(source src, target tgt) extends BackboneElement {
+  src.actorId -> tgt.actorId;
+  src.type -> tgt.type;
+  src.typeCanonical -> tgt.typeCanonical;
+  src.typeReference -> tgt.typeReference; // Warning: Source TargetProfile unsupported: DeviceDefinition,Group  (CareTeam,Device,DeviceDefinition,Endpoint,Group,HealthcareService,Location,Organization,Patient,Practitioner,PractitionerRole,RelatedPerson -> BiologicallyDerivedProduct,CareTeam,Device,Endpoint,HealthcareService,Location,Medication,MedicinalProductDefinition,Organization,Patient,Practitioner,PractitionerRole,RelatedPerson,Specimen,Substance,SubstanceDefinition)
+  src.role -> tgt.role;
+  src.function -> tgt.function;
+}
+
+
+group PlanDefinitionActionDynamicValue(source src, target tgt) extends BackboneElement {
+  src.path -> tgt.path;
+  src.expression -> tgt.expression;
+}

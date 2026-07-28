@@ -1,0 +1,37 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/RegulatedAuthorization5to6'
+/// name = 'RegulatedAuthorization5to6'
+/// title = 'RegulatedAuthorization Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/RegulatedAuthorization" alias RegulatedAuthorizationR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/RegulatedAuthorization" alias RegulatedAuthorizationR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group RegulatedAuthorization(source src : RegulatedAuthorizationR5, target tgt : RegulatedAuthorizationR6) extends DomainResource <<type+>> {
+  src.identifier -> tgt.identifier;
+  src.subject -> tgt.subject;
+  src.type -> tgt.type;
+  src.description -> tgt.description;
+  src.region -> tgt.region;
+  src.status -> tgt.status;
+  src.statusDate -> tgt.statusDate;
+  src.validityPeriod -> tgt.validityPeriod;
+  src.indication -> tgt.indication;
+  src.intendedUse -> tgt.intendedUse;
+  src.basis -> tgt.basis;
+  src.holder -> tgt.holder;
+  src.regulator -> tgt.regulator;
+  src.attachedDocument -> tgt.attachedDocument;
+  src.case as s -> tgt.case as t then RegulatedAuthorizationCase(s, t);
+}
+
+
+group RegulatedAuthorizationCase(source src, target tgt) extends BackboneElement {
+  src.identifier -> tgt.identifier;
+  src.type -> tgt.type;
+  src.status -> tgt.status;
+  src.date -> tgt.date;
+  src.application as s -> tgt.application as t then RegulatedAuthorizationCase(s, t);
+}

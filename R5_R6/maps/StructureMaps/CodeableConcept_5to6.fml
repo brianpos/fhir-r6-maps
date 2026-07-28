@@ -1,0 +1,15 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/CodeableConcept5to6'
+/// name = 'CodeableConcept5to6'
+/// title = 'CodeableConcept Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/CodeableConcept" alias CodeableConceptR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/CodeableConcept" alias CodeableConceptR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group CodeableConcept(source src : CodeableConceptR5, target tgt : CodeableConceptR6) extends DataType <<type+>> {
+  src.coding -> tgt.coding;
+  src.text -> tgt.text;
+}

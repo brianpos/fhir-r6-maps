@@ -1,0 +1,27 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/RelatedArtifact5to6'
+/// name = 'RelatedArtifact5to6'
+/// title = 'RelatedArtifact Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/RelatedArtifact" alias RelatedArtifactR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/RelatedArtifact" alias RelatedArtifactR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following source properties were not read:
+    RelatedArtifact.classifier CodeableConcept[0..*]
+    RelatedArtifact.publicationStatus code[0..1]
+    RelatedArtifact.publicationDate date[0..1]
+*/
+/* The following target properties were not populated:
+    RelatedArtifact.url url[0..1]
+*/
+group RelatedArtifact(source src : RelatedArtifactR5, target tgt : RelatedArtifactR6) extends DataType <<type+>> {
+  src.type -> tgt.type;
+  src.label -> tgt.label;
+  src.display -> tgt.display;
+  src.citation -> tgt.citation;
+  src.document -> tgt.document;
+  src.resource -> tgt.resource;
+  src.resourceReference -> tgt.resourceReference;
+}

@@ -1,0 +1,19 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/Meta5to6'
+/// name = 'Meta5to6'
+/// title = 'Meta Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/Meta" alias MetaR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/Meta" alias MetaR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group Meta(source src : MetaR5, target tgt : MetaR6) extends DataType <<type+>> {
+  src.versionId -> tgt.versionId;
+  src.lastUpdated -> tgt.lastUpdated;
+  src.source -> tgt.source;
+  src.profile -> tgt.profile;
+  src.security -> tgt.security;
+  src.tag -> tgt.tag;
+}

@@ -1,0 +1,23 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/Address5to6'
+/// name = 'Address5to6'
+/// title = 'Address Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/Address" alias AddressR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/Address" alias AddressR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group Address(source src : AddressR5, target tgt : AddressR6) extends DataType <<type+>> {
+  src.use -> tgt.use;
+  src.type -> tgt.type;
+  src.text -> tgt.text;
+  src.line -> tgt.line;
+  src.city -> tgt.city;
+  src.district -> tgt.district;
+  src.state -> tgt.state;
+  src.postalCode -> tgt.postalCode;
+  src.country -> tgt.country;
+  src.period -> tgt.period;
+}

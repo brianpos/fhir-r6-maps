@@ -1,0 +1,235 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/SubstanceDefinition5to6'
+/// name = 'SubstanceDefinition5to6'
+/// title = 'SubstanceDefinition Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/SubstanceDefinition" alias SubstanceDefinitionR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/SubstanceDefinition" alias SubstanceDefinitionR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following source properties were not read:
+    SubstanceDefinition.informationSource Reference[0..*] (Citation)
+    SubstanceDefinition.referenceInformation Reference[0..1] (SubstanceReferenceInformation)
+    SubstanceDefinition.relationship.ratioHighLimitAmount Ratio[0..1]
+    SubstanceDefinition.nucleicAcid.reference string[0..1]
+    SubstanceDefinition.nucleicAcid.type uri[0..1]
+    SubstanceDefinition.nucleicAcid.identifier Identifier[0..1]
+    SubstanceDefinition.nucleicAcid.display string[0..1]
+    SubstanceDefinition.polymer.reference string[0..1]
+    SubstanceDefinition.polymer.type uri[0..1]
+    SubstanceDefinition.polymer.identifier Identifier[0..1]
+    SubstanceDefinition.polymer.display string[0..1]
+    SubstanceDefinition.protein.reference string[0..1]
+    SubstanceDefinition.protein.type uri[0..1]
+    SubstanceDefinition.protein.identifier Identifier[0..1]
+    SubstanceDefinition.protein.display string[0..1]
+*/
+/* The following target properties were not populated:
+    SubstanceDefinition.glycosylationType CodeableConcept[0..1]
+    SubstanceDefinition.relationship.measurementType CodeableConcept[0..1]
+    SubstanceDefinition.relationship.interaction CodeableConcept[0..1]
+    SubstanceDefinition.relationship.organism CodeableConcept[0..1]
+    SubstanceDefinition.relationship.organismType CodeableConcept[0..1]
+    SubstanceDefinition.nucleicAcid.sequenceType CodeableConcept[0..1]
+    SubstanceDefinition.nucleicAcid.numberOfSubunits integer[0..1]
+    SubstanceDefinition.nucleicAcid.areaOfHybridisation string[0..1]
+    SubstanceDefinition.nucleicAcid.oligoNucleotideType CodeableConcept[0..1]
+    SubstanceDefinition.nucleicAcid.subunit BackboneElement[0..*]
+    SubstanceDefinition.nucleicAcid.subunit.subunit integer[0..1]
+    SubstanceDefinition.nucleicAcid.subunit.sequence string[0..1]
+    SubstanceDefinition.nucleicAcid.subunit.length integer[0..1]
+    SubstanceDefinition.nucleicAcid.subunit.sequenceAttachment Attachment[0..1]
+    SubstanceDefinition.nucleicAcid.subunit.fivePrime CodeableConcept[0..1]
+    SubstanceDefinition.nucleicAcid.subunit.threePrime CodeableConcept[0..1]
+    SubstanceDefinition.nucleicAcid.subunit.linkage BackboneElement[0..*]
+    SubstanceDefinition.nucleicAcid.subunit.linkage.connectivity string[0..1]
+    SubstanceDefinition.nucleicAcid.subunit.linkage.substance CodeableReference[0..1] (SubstanceDefinition)
+    SubstanceDefinition.nucleicAcid.subunit.linkage.residueSite string[0..1]
+    SubstanceDefinition.nucleicAcid.subunit.sugar BackboneElement[0..*]
+    SubstanceDefinition.nucleicAcid.subunit.sugar.substance CodeableReference[0..1] (SubstanceDefinition)
+    SubstanceDefinition.nucleicAcid.subunit.sugar.residueSite string[0..1]
+    SubstanceDefinition.nucleicAcid.gene BackboneElement[0..*]
+    SubstanceDefinition.nucleicAcid.gene.sequenceOrigin CodeableConcept[0..1]
+    SubstanceDefinition.nucleicAcid.gene.gene CodeableReference[0..1] (SubstanceDefinition)
+    SubstanceDefinition.nucleicAcid.gene.source Reference[0..*] (DocumentReference)
+    SubstanceDefinition.nucleicAcid.geneElement BackboneElement[0..*]
+    SubstanceDefinition.nucleicAcid.geneElement.type CodeableConcept[0..1]
+    SubstanceDefinition.nucleicAcid.geneElement.element CodeableReference[0..1] (SubstanceDefinition)
+    SubstanceDefinition.nucleicAcid.geneElement.source Reference[0..*] (DocumentReference)
+    SubstanceDefinition.polymer.class CodeableConcept[0..1]
+    SubstanceDefinition.polymer.geometry CodeableConcept[0..1]
+    SubstanceDefinition.polymer.copolymerConnectivity CodeableConcept[0..*]
+    SubstanceDefinition.polymer.modification string[0..1]
+    SubstanceDefinition.polymer.monomerSet BackboneElement[0..*]
+    SubstanceDefinition.polymer.monomerSet.ratioType CodeableConcept[0..1]
+    SubstanceDefinition.polymer.monomerSet.startingMaterial BackboneElement[0..*]
+    SubstanceDefinition.polymer.monomerSet.startingMaterial.code CodeableReference[0..1] (SubstanceDefinition)
+    SubstanceDefinition.polymer.monomerSet.startingMaterial.category CodeableConcept[0..1]
+    SubstanceDefinition.polymer.monomerSet.startingMaterial.isDefining boolean[0..1]
+    SubstanceDefinition.polymer.monomerSet.startingMaterial.amount Quantity[0..1]
+    SubstanceDefinition.polymer.repeat BackboneElement[0..*]
+    SubstanceDefinition.polymer.repeat.averageMolecularFormula string[0..1]
+    SubstanceDefinition.polymer.repeat.repeatUnitAmountType CodeableConcept[0..1]
+    SubstanceDefinition.polymer.repeat.repeatUnit BackboneElement[0..*]
+    SubstanceDefinition.polymer.repeat.repeatUnit.unit string[0..1]
+    SubstanceDefinition.polymer.repeat.repeatUnit.orientation CodeableConcept[0..1]
+    SubstanceDefinition.polymer.repeat.repeatUnit.amount integer[0..1]
+    SubstanceDefinition.polymer.repeat.repeatUnit.degreeOfPolymerisation BackboneElement[0..*]
+    SubstanceDefinition.polymer.repeat.repeatUnit.degreeOfPolymerisation.type CodeableConcept[0..1]
+    SubstanceDefinition.polymer.repeat.repeatUnit.degreeOfPolymerisation.average integer[0..1]
+    SubstanceDefinition.polymer.repeat.repeatUnit.degreeOfPolymerisation.low integer[0..1]
+    SubstanceDefinition.polymer.repeat.repeatUnit.degreeOfPolymerisation.high integer[0..1]
+    SubstanceDefinition.polymer.repeat.repeatUnit.structuralRepresentation [0..*]
+    SubstanceDefinition.protein.sequenceType CodeableConcept[0..1]
+    SubstanceDefinition.protein.numberOfSubunits integer[0..1]
+    SubstanceDefinition.protein.disulfideLinkage string[0..*]
+    SubstanceDefinition.protein.subunit BackboneElement[0..*]
+    SubstanceDefinition.protein.subunit.subunit integer[0..1]
+    SubstanceDefinition.protein.subunit.sequence string[0..1]
+    SubstanceDefinition.protein.subunit.length integer[0..1]
+    SubstanceDefinition.protein.subunit.sequenceAttachment Attachment[0..1]
+    SubstanceDefinition.protein.subunit.nTerminalModification CodeableReference[0..1] (SubstanceDefinition)
+    SubstanceDefinition.protein.subunit.cTerminalModification CodeableReference[0..1] (SubstanceDefinition)
+    SubstanceDefinition.protein.gene [0..*]
+    SubstanceDefinition.protein.modificationType CodeableConcept[0..1]
+*/
+group SubstanceDefinition(source src : SubstanceDefinitionR5, target tgt : SubstanceDefinitionR6) extends DomainResource <<type+>> {
+  src.identifier -> tgt.identifier;
+  src.version -> tgt.version;
+  src.status -> tgt.status;
+  src.classification -> tgt.classification;
+  src.domain -> tgt.domain;
+  src.grade -> tgt.grade;
+  src.description -> tgt.description;
+  src.note -> tgt.note;
+  src.manufacturer -> tgt.manufacturer;
+  src.supplier -> tgt.supplier;
+  src.moiety as s -> tgt.moiety as t then SubstanceDefinitionMoiety(s, t);
+  src.characterization as s -> tgt.characterization as t then SubstanceDefinitionCharacterization(s, t);
+  src.property as s -> tgt.property as t then SubstanceDefinitionProperty(s, t);
+  src.molecularWeight as s -> tgt.molecularWeight as t then SubstanceDefinitionMolecularWeight(s, t);
+  src.structure as s -> tgt.structure as t then SubstanceDefinitionStructure(s, t);
+  src.code as s -> tgt.code as t then SubstanceDefinitionCode(s, t);
+  src.name as s -> tgt.name as t then SubstanceDefinitionName(s, t);
+  src.relationship as s -> tgt.relationship as t then SubstanceDefinitionRelationship(s, t);
+  src.nucleicAcid as s -> tgt.nucleicAcid as t then SubstanceDefinitionNucleicAcid(s, t); // Warning: type changed (Reference -> BackboneElement)
+  src.polymer as s -> tgt.polymer as t then SubstanceDefinitionPolymer(s, t); // Warning: type changed (Reference -> BackboneElement)
+  src.protein as s -> tgt.protein as t then SubstanceDefinitionProtein(s, t); // Warning: type changed (Reference -> BackboneElement)
+  src.sourceMaterial as s -> tgt.sourceMaterial as t then SubstanceDefinitionSourceMaterial(s, t);
+}
+
+
+group SubstanceDefinitionMoiety(source src, target tgt) extends BackboneElement {
+  src.role -> tgt.role;
+  src.identifier -> tgt.identifier;
+  src.name -> tgt.name;
+  src.stereochemistry -> tgt.stereochemistry;
+  src.opticalActivity -> tgt.opticalActivity;
+  src.molecularFormula -> tgt.molecularFormula;
+  src.amount -> tgt.amount;
+  src.measurementType -> tgt.measurementType;
+}
+
+
+group SubstanceDefinitionCharacterization(source src, target tgt) extends BackboneElement {
+  src.technique -> tgt.technique;
+  src.form -> tgt.form;
+  src.description -> tgt.description;
+  src.file -> tgt.file;
+}
+
+
+group SubstanceDefinitionProperty(source src, target tgt) extends BackboneElement {
+  src.type -> tgt.type;
+  src.value -> tgt.value;
+}
+
+
+group SubstanceDefinitionMolecularWeight(source src, target tgt) extends BackboneElement {
+  src.method -> tgt.method;
+  src.type -> tgt.type;
+  src.amount -> tgt.amount;
+}
+
+
+group SubstanceDefinitionStructure(source src, target tgt) extends BackboneElement {
+  src.stereochemistry -> tgt.stereochemistry;
+  src.opticalActivity -> tgt.opticalActivity;
+  src.molecularFormula -> tgt.molecularFormula;
+  src.molecularFormulaByMoiety -> tgt.molecularFormulaByMoiety;
+  src.molecularWeight as s -> tgt.molecularWeight as t then SubstanceDefinitionMolecularWeight(s, t);
+  src.technique -> tgt.technique;
+  src.sourceDocument -> tgt.sourceDocument;
+  src.representation as s -> tgt.representation as t then SubstanceDefinitionStructureRepresentation(s, t);
+}
+
+
+group SubstanceDefinitionStructureRepresentation(source src, target tgt) extends BackboneElement {
+  src.type -> tgt.type;
+  src.representation -> tgt.representation;
+  src.format -> tgt.format;
+  src.document -> tgt.document;
+}
+
+
+group SubstanceDefinitionCode(source src, target tgt) extends BackboneElement {
+  src.code -> tgt.code;
+  src.status -> tgt.status;
+  src.statusDate -> tgt.statusDate;
+  src.note -> tgt.note;
+  src.source -> tgt.source;
+}
+
+
+group SubstanceDefinitionName(source src, target tgt) extends BackboneElement {
+  src.name -> tgt.name;
+  src.type -> tgt.type;
+  src.status -> tgt.status;
+  src.preferred -> tgt.preferred;
+  src.language -> tgt.language;
+  src.domain -> tgt.domain;
+  src.jurisdiction -> tgt.jurisdiction;
+  src.synonym as s -> tgt.synonym as t then SubstanceDefinitionName(s, t);
+  src.translation as s -> tgt.translation as t then SubstanceDefinitionName(s, t);
+  src.official as s -> tgt.official as t then SubstanceDefinitionNameOfficial(s, t);
+  src.source -> tgt.source;
+}
+
+
+group SubstanceDefinitionNameOfficial(source src, target tgt) extends BackboneElement {
+  src.authority -> tgt.authority;
+  src.status -> tgt.status;
+  src.date -> tgt.date;
+}
+
+
+group SubstanceDefinitionRelationship(source src, target tgt) extends BackboneElement {
+  src.substanceDefinition -> tgt.substanceDefinition;
+  src.type -> tgt.type;
+  src.isDefining -> tgt.isDefining;
+  src.amount -> tgt.amount;
+  src.comparator -> tgt.comparator;
+  src.source -> tgt.source;
+}
+
+
+group SubstanceDefinitionNucleicAcid(source src, target tgt) extends BackboneElement {
+}
+
+
+group SubstanceDefinitionPolymer(source src, target tgt) extends BackboneElement {
+}
+
+
+group SubstanceDefinitionProtein(source src, target tgt) extends BackboneElement {
+}
+
+
+group SubstanceDefinitionSourceMaterial(source src, target tgt) extends BackboneElement {
+  src.type -> tgt.type;
+  src.genus -> tgt.genus;
+  src.species -> tgt.species;
+  src.part -> tgt.part;
+  src.countryOfOrigin -> tgt.countryOfOrigin;
+}

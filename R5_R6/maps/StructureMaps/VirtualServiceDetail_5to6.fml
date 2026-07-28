@@ -1,0 +1,18 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/VirtualServiceDetail5to6'
+/// name = 'VirtualServiceDetail5to6'
+/// title = 'VirtualServiceDetail Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/VirtualServiceDetail" alias VirtualServiceDetailR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/VirtualServiceDetail" alias VirtualServiceDetailR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group VirtualServiceDetail(source src : VirtualServiceDetailR5, target tgt : VirtualServiceDetailR6) extends DataType <<type+>> {
+  src.channelType -> tgt.channelType;
+  src.address -> tgt.address;
+  src.additionalInfo -> tgt.additionalInfo;
+  src.maxParticipants -> tgt.maxParticipants;
+  src.sessionKey -> tgt.sessionKey;
+}

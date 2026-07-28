@@ -1,0 +1,47 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/ManufacturedItemDefinition5to6'
+/// name = 'ManufacturedItemDefinition5to6'
+/// title = 'ManufacturedItemDefinition Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/ManufacturedItemDefinition" alias ManufacturedItemDefinitionR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/ManufacturedItemDefinition" alias ManufacturedItemDefinitionR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group ManufacturedItemDefinition(source src : ManufacturedItemDefinitionR5, target tgt : ManufacturedItemDefinitionR6) extends DomainResource <<type+>> {
+  src.identifier -> tgt.identifier;
+  src.status -> tgt.status;
+  src.name -> tgt.name;
+  src.manufacturedDoseForm -> tgt.manufacturedDoseForm;
+  src.unitOfPresentation -> tgt.unitOfPresentation;
+  src.manufacturer -> tgt.manufacturer;
+  src.marketingStatus -> tgt.marketingStatus;
+  src.ingredient -> tgt.ingredient;
+  src.property as s -> tgt.property as t then ManufacturedItemDefinitionProperty(s, t);
+  src.component as s -> tgt.component as t then ManufacturedItemDefinitionComponent(s, t);
+}
+
+
+group ManufacturedItemDefinitionProperty(source src, target tgt) extends BackboneElement {
+  src.type -> tgt.type;
+  src.value -> tgt.value;
+}
+
+
+group ManufacturedItemDefinitionComponent(source src, target tgt) extends BackboneElement {
+  src.type -> tgt.type;
+  src.function -> tgt.function;
+  src.amount -> tgt.amount;
+  src.constituent as s -> tgt.constituent as t then ManufacturedItemDefinitionComponentConstituent(s, t);
+  src.property as s -> tgt.property as t then ManufacturedItemDefinitionProperty(s, t);
+  src.component as s -> tgt.component as t then ManufacturedItemDefinitionComponent(s, t);
+}
+
+
+group ManufacturedItemDefinitionComponentConstituent(source src, target tgt) extends BackboneElement {
+  src.amount -> tgt.amount;
+  src.location -> tgt.location;
+  src.function -> tgt.function;
+  src.hasIngredient -> tgt.hasIngredient;
+}

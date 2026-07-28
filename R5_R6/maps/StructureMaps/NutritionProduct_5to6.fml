@@ -1,0 +1,58 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/NutritionProduct5to6'
+/// name = 'NutritionProduct5to6'
+/// title = 'NutritionProduct Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/NutritionProduct" alias NutritionProductR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/NutritionProduct" alias NutritionProductR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following source properties were not read:
+    NutritionProduct.knownAllergen CodeableReference[0..*] (Substance)
+*/
+/* The following target properties were not populated:
+    NutritionProduct.ingredientSummary markdown[0..1]
+    NutritionProduct.ingredient.allergen boolean[0..1]
+    NutritionProduct.energy Quantity[0..1]
+*/
+group NutritionProduct(source src : NutritionProductR5, target tgt : NutritionProductR6) extends DomainResource <<type+>> {
+  src.code -> tgt.code;
+  src.status -> tgt.status;
+  src.category -> tgt.category;
+  src.manufacturer -> tgt.manufacturer;
+  src.nutrient as s -> tgt.nutrient as t then NutritionProductNutrient(s, t);
+  src.ingredient as s -> tgt.ingredient as t then NutritionProductIngredient(s, t);
+  src.characteristic as s -> tgt.characteristic as t then NutritionProductCharacteristic(s, t);
+  src.instance as s -> tgt.instance as t then NutritionProductInstance(s, t);
+  src.note -> tgt.note;
+}
+
+
+group NutritionProductNutrient(source src, target tgt) extends BackboneElement {
+  src.item /* [0..1] */ -> tgt.item /* [1..1] */; // Warning: source optional, target mandatory    Source TargetProfile unsupported: Substance  (Substance -> SubstanceDefinition)
+  src.amount /* [0..*] */ -> tgt.amount /* [0..1] */; // Warning: source repeating, target single-valued
+}
+
+
+group NutritionProductIngredient(source src, target tgt) extends BackboneElement {
+  src.item -> tgt.item;
+  src.amount /* [0..*] */ -> tgt.amount /* [0..1] */; // Warning: source repeating, target single-valued
+}
+
+
+group NutritionProductCharacteristic(source src, target tgt) extends BackboneElement {
+  src.type -> tgt.type;
+  src.value -> tgt.value;
+}
+
+
+group NutritionProductInstance(source src, target tgt) extends BackboneElement {
+  src.quantity -> tgt.quantity;
+  src.identifier -> tgt.identifier;
+  src.name -> tgt.name;
+  src.lotNumber -> tgt.lotNumber;
+  src.expiry -> tgt.expiry;
+  src.useBy -> tgt.useBy;
+  src.biologicalSourceEvent -> tgt.biologicalSourceEvent;
+}

@@ -1,0 +1,46 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/HealthcareService5to6'
+/// name = 'HealthcareService5to6'
+/// title = 'HealthcareService Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/HealthcareService" alias HealthcareServiceR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/HealthcareService" alias HealthcareServiceR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following target properties were not populated:
+    HealthcareService.eligibility.value[x] CodeableConcept,boolean,Quantity,Range,Reference[0..1]
+    HealthcareService.eligibility.period Period[0..1]
+    HealthcareService.referralRequired boolean[0..1]
+*/
+group HealthcareService(source src : HealthcareServiceR5, target tgt : HealthcareServiceR6) extends DomainResource <<type+>> {
+  src.identifier -> tgt.identifier;
+  src.active -> tgt.active;
+  src.providedBy -> tgt.providedBy;
+  src.offeredIn -> tgt.offeredIn;
+  src.category -> tgt.category;
+  src.type -> tgt.type;
+  src.specialty -> tgt.specialty;
+  src.location -> tgt.location;
+  src.name -> tgt.name;
+  src.comment -> tgt.comment;
+  src.extraDetails -> tgt.extraDetails;
+  src.photo -> tgt.photo;
+  src.contact -> tgt.contact;
+  src.coverageArea -> tgt.coverageArea;
+  src.serviceProvisionCode -> tgt.serviceProvisionCode;
+  src.eligibility as s -> tgt.eligibility as t then HealthcareServiceEligibility(s, t);
+  src.program -> tgt.program;
+  src.characteristic -> tgt.characteristic;
+  src.communication -> tgt.communication;
+  src.referralMethod -> tgt.referralMethod;
+  src.appointmentRequired -> tgt.appointmentRequired;
+  src.availability /* [0..*] */ -> tgt.availability /* [0..1] */; // Warning: source repeating, target single-valued
+  src.endpoint -> tgt.endpoint;
+}
+
+
+group HealthcareServiceEligibility(source src, target tgt) extends BackboneElement {
+  src.code -> tgt.code;
+  src.comment -> tgt.comment;
+}

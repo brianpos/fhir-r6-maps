@@ -1,0 +1,13 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/PrimitiveType5to6'
+/// name = 'PrimitiveType5to6'
+/// title = 'PrimitiveType Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/PrimitiveType" alias PrimitiveTypeR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/PrimitiveType" alias PrimitiveTypeR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group PrimitiveType(source src : PrimitiveTypeR5, target tgt : PrimitiveTypeR6) extends DataType <<type+>> {
+}

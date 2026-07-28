@@ -1,0 +1,108 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/RequestOrchestration5to6'
+/// name = 'RequestOrchestration5to6'
+/// title = 'RequestOrchestration Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/RequestOrchestration" alias RequestOrchestrationR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/RequestOrchestration" alias RequestOrchestrationR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following target properties were not populated:
+    RequestOrchestration.action.applicabilityBehavior code[0..1]
+*/
+group RequestOrchestration(source src : RequestOrchestrationR5, target tgt : RequestOrchestrationR6) extends DomainResource <<type+>> {
+  src.identifier -> tgt.identifier;
+  src.instantiatesCanonical -> tgt.instantiatesCanonical;
+  src.instantiatesUri -> tgt.instantiatesUri;
+  src.basedOn -> tgt.basedOn;
+  src.replaces -> tgt.replaces;
+  src.groupIdentifier -> tgt.groupIdentifier;
+  src.status -> tgt.status;
+  src.intent -> tgt.intent;
+  src.priority -> tgt.priority;
+  src.code -> tgt.code;
+  src.subject -> tgt.subject;
+  src.encounter -> tgt.encounter;
+  src.authoredOn -> tgt.authoredOn;
+  src.author -> tgt.author;
+  src.reason -> tgt.reason;
+  src.goal -> tgt.goal;
+  src.note -> tgt.note;
+  src.action as s -> tgt.action as t then RequestOrchestrationAction(s, t);
+}
+
+
+group RequestOrchestrationAction(source src, target tgt) extends BackboneElement {
+  src.linkId -> tgt.linkId;
+  src.prefix -> tgt.prefix;
+  src.title -> tgt.title;
+  src.description -> tgt.description;
+  src.textEquivalent -> tgt.textEquivalent;
+  src.priority -> tgt.priority;
+  src.code -> tgt.code;
+  src.documentation -> tgt.documentation;
+  src.goal -> tgt.goal;
+  src.condition as s -> tgt.condition as t then RequestOrchestrationActionCondition(s, t);
+  src.input as s -> tgt.input as t then RequestOrchestrationActionInput(s, t);
+  src.output as s -> tgt.output as t then RequestOrchestrationActionOutput(s, t);
+  src.relatedAction as s -> tgt.relatedAction as t then RequestOrchestrationActionRelatedAction(s, t);
+  src.timing -> tgt.timing;
+  src.location -> tgt.location;
+  src.participant as s -> tgt.participant as t then RequestOrchestrationActionParticipant(s, t);
+  src.type -> tgt.type;
+  src.groupingBehavior -> tgt.groupingBehavior;
+  src.selectionBehavior -> tgt.selectionBehavior;
+  src.requiredBehavior -> tgt.requiredBehavior;
+  src.precheckBehavior -> tgt.precheckBehavior;
+  src.cardinalityBehavior -> tgt.cardinalityBehavior;
+  src.resource -> tgt.resource;
+  src.definition -> tgt.definition;
+  src.transform -> tgt.transform;
+  src.dynamicValue as s -> tgt.dynamicValue as t then RequestOrchestrationActionDynamicValue(s, t);
+  src.action as s -> tgt.action as t then RequestOrchestrationAction(s, t);
+}
+
+
+group RequestOrchestrationActionCondition(source src, target tgt) extends BackboneElement {
+  src.kind -> tgt.kind;
+  src.expression -> tgt.expression;
+}
+
+
+group RequestOrchestrationActionInput(source src, target tgt) extends BackboneElement {
+  src.title -> tgt.title;
+  src.requirement -> tgt.requirement;
+  src.relatedData -> tgt.relatedData;
+}
+
+
+group RequestOrchestrationActionOutput(source src, target tgt) extends BackboneElement {
+  src.title -> tgt.title;
+  src.requirement -> tgt.requirement;
+  src.relatedData -> tgt.relatedData;
+}
+
+
+group RequestOrchestrationActionRelatedAction(source src, target tgt) extends BackboneElement {
+  src.targetId -> tgt.targetId;
+  src.relationship -> tgt.relationship;
+  src.endRelationship -> tgt.endRelationship;
+  src.offset -> tgt.offset;
+}
+
+
+group RequestOrchestrationActionParticipant(source src, target tgt) extends BackboneElement {
+  src.type -> tgt.type;
+  src.typeCanonical -> tgt.typeCanonical;
+  src.typeReference -> tgt.typeReference; // Warning: Source TargetProfile unsupported: DeviceDefinition,Group  (CareTeam,Device,DeviceDefinition,Endpoint,Group,HealthcareService,Location,Organization,Patient,Practitioner,PractitionerRole,RelatedPerson -> BiologicallyDerivedProduct,CareTeam,Device,Endpoint,HealthcareService,Location,Medication,MedicinalProductDefinition,Organization,Patient,Practitioner,PractitionerRole,RelatedPerson,Specimen,Substance,SubstanceDefinition)
+  src.role -> tgt.role;
+  src.function -> tgt.function;
+  src.actor -> tgt.actor;
+}
+
+
+group RequestOrchestrationActionDynamicValue(source src, target tgt) extends BackboneElement {
+  src.path -> tgt.path;
+  src.expression -> tgt.expression;
+}

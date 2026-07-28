@@ -1,0 +1,14 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/integer5to6'
+/// name = 'integer5to6'
+/// title = 'integer Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/integer" alias integerR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/integer" alias integerR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group Integer(source src : integerR5, target tgt : integerR6) extends PrimitiveType <<type+>> {
+  src.value -> tgt.value;
+}

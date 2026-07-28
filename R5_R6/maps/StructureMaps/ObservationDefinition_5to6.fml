@@ -1,0 +1,77 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/ObservationDefinition5to6'
+/// name = 'ObservationDefinition5to6'
+/// title = 'ObservationDefinition Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/ObservationDefinition" alias ObservationDefinitionR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/ObservationDefinition" alias ObservationDefinitionR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following target properties were not populated:
+    ObservationDefinition.supportingDevice CodeableReference[0..*] (DeviceDefinition)
+    ObservationDefinition.qualifiedValue.interpretation CodeableConcept[0..*]
+*/
+group ObservationDefinition(source src : ObservationDefinitionR5, target tgt : ObservationDefinitionR6) extends DomainResource <<type+>> {
+  src.url -> tgt.url;
+  src.identifier -> tgt.identifier;
+  src.version -> tgt.version;
+  src.versionAlgorithm -> tgt.versionAlgorithm;
+  src.name -> tgt.name;
+  src.title -> tgt.title;
+  src.status -> tgt.status;
+  src.experimental -> tgt.experimental;
+  src.date -> tgt.date;
+  src.publisher -> tgt.publisher;
+  src.contact -> tgt.contact;
+  src.description -> tgt.description;
+  src.useContext -> tgt.useContext;
+  src.jurisdiction -> tgt.jurisdiction;
+  src.purpose -> tgt.purpose;
+  src.copyright -> tgt.copyright;
+  src.copyrightLabel -> tgt.copyrightLabel;
+  src.approvalDate -> tgt.approvalDate;
+  src.lastReviewDate -> tgt.lastReviewDate;
+  src.effectivePeriod -> tgt.effectivePeriod;
+  src.derivedFromCanonical -> tgt.derivedFromCanonical;
+  src.derivedFromUri -> tgt.derivedFromUri;
+  src.subject -> tgt.subject;
+  src.performerType -> tgt.performerType;
+  src.category -> tgt.category;
+  src.code -> tgt.code;
+  src.permittedDataType -> tgt.permittedDataType;
+  src.multipleResultsAllowed -> tgt.multipleResultsAllowed;
+  src.bodySite -> tgt.bodyStructure; // renamed
+  src.method -> tgt.method;
+  src.specimen -> tgt.specimen;
+  src.device /* [0..*] */ -> tgt.device /* [0..1] */; // Warning: source repeating, target single-valued
+  src.preferredReportName -> tgt.preferredReportName;
+  src.permittedUnit -> tgt.permittedUnit;
+  src.qualifiedValue as s -> tgt.qualifiedValue as t then ObservationDefinitionQualifiedValue(s, t);
+  src.hasMember -> tgt.hasMember;
+  src.component as s -> tgt.component as t then ObservationDefinitionComponent(s, t);
+}
+
+
+group ObservationDefinitionQualifiedValue(source src, target tgt) extends BackboneElement {
+  src.context -> tgt.context;
+  src.appliesTo -> tgt.appliesTo;
+  src.gender -> tgt.sexParameterForClinicalUse; // renamed
+  src.age -> tgt.age;
+  src.gestationalAge -> tgt.gestationalAge;
+  src.condition -> tgt.condition;
+  src.rangeCategory -> tgt.rangeCategory;
+  src.range -> tgt.range;
+  src.validCodedValueSet -> tgt.validCodedValueSet;
+  src.normalCodedValueSet -> tgt.normalCodedValueSet;
+  src.abnormalCodedValueSet -> tgt.abnormalCodedValueSet;
+  src.criticalCodedValueSet -> tgt.criticalCodedValueSet;
+}
+
+
+group ObservationDefinitionComponent(source src, target tgt) extends BackboneElement {
+  src.code -> tgt.code;
+  src.permittedDataType -> tgt.permittedDataType;
+  src.permittedUnit -> tgt.permittedUnit;
+  src.qualifiedValue as s -> tgt.qualifiedValue as t then ObservationDefinitionQualifiedValue(s, t);
+}

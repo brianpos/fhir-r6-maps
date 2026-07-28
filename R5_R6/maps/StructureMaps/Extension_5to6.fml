@@ -1,0 +1,15 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/Extension5to6'
+/// name = 'Extension5to6'
+/// title = 'Extension Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/Extension" alias ExtensionR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/Extension" alias ExtensionR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group Extension(source src : ExtensionR5, target tgt : ExtensionR6) extends DataType <<type+>> {
+  src.url -> tgt.url;
+  src.value -> tgt.value;
+}

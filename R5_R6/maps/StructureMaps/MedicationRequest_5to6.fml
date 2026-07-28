@@ -1,0 +1,79 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/MedicationRequest5to6'
+/// name = 'MedicationRequest5to6'
+/// title = 'MedicationRequest Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/MedicationRequest" alias MedicationRequestR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/MedicationRequest" alias MedicationRequestR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following source properties were not read:
+    MedicationRequest.renderedDosageInstruction markdown[0..1]
+*/
+/* The following target properties were not populated:
+    MedicationRequest.dispenseRequest.destination Reference[0..1] (Location)
+*/
+group MedicationRequest(source src : MedicationRequestR5, target tgt : MedicationRequestR6) extends DomainResource <<type+>> {
+  src.identifier -> tgt.identifier;
+  src.basedOn -> tgt.basedOn; // Warning: Source TargetProfile unsupported: ImmunizationRecommendation  (CarePlan,MedicationRequest,ServiceRequest,ImmunizationRecommendation -> CarePlan,MedicationRequest,ServiceRequest,RequestOrchestration)
+  src.priorPrescription -> tgt.priorPrescription;
+  src.groupIdentifier -> tgt.groupIdentifier;
+  src.status -> tgt.status;
+  src.statusReason -> tgt.statusReason;
+  src.statusChanged -> tgt.statusChanged;
+  src.intent -> tgt.intent;
+  src.category -> tgt.category;
+  src.priority -> tgt.priority;
+  src.doNotPerform -> tgt.doNotPerform;
+  src.medication -> tgt.medication;
+  src.subject -> tgt.subject;
+  src.informationSource -> tgt.informationSource;
+  src.encounter -> tgt.encounter;
+  src.supportingInformation -> tgt.supportingInformation;
+  src.authoredOn -> tgt.authoredOn;
+  src.requester -> tgt.requester;
+  src.reported -> tgt.isRecordOfRequest; // renamed
+  src.performerType -> tgt.performerType;
+  src.performer -> tgt.performer;
+  src.device -> tgt.device;
+  src.recorder -> tgt.recorder;
+  src.reason -> tgt.reason;
+  src.courseOfTherapyType -> tgt.courseOfTherapyType;
+  src.insurance -> tgt.insurance;
+  src.note -> tgt.note;
+  src.effectiveDosePeriod -> tgt.effectiveTiming; // renamed
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-MedicationRequest.dosageInstruction') -> tgt.dosageInstruction = (e.value) "xverDosageInstructionDosage";
+// rule changed to Dosage -> DosageDetails
+// src.dosageInstruction /* [0..*] */ -> tgt.dosageInstruction /* [0..1] */; // Warning: source repeating, target single-valued    Source Type unsupported: Dosage  (Dosage -> DosageDetails)
+  src.dispenseRequest as s -> tgt.dispenseRequest as t then MedicationRequestDispenseRequest(s, t);
+  src.substitution as s -> tgt.substitution as t then MedicationRequestSubstitution(s, t);
+  src.eventHistory -> tgt.eventHistory;
+}
+
+
+group MedicationRequestDispenseRequest(source src, target tgt) extends BackboneElement {
+  src.initialFill as s -> tgt.initialFill as t then MedicationRequestDispenseRequestInitialFill(s, t);
+  src.dispenseInterval -> tgt.dispenseInterval;
+  src.validityPeriod -> tgt.validityPeriod;
+  src.numberOfRepeatsAllowed -> tgt.numberOfRepeatsAllowed;
+  src.quantity -> tgt.quantity;
+  src.expectedSupplyDuration -> tgt.expectedSupplyDuration;
+  src.dispenser -> tgt.dispenser;
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-MedicationRequest.dispenseRequest.dispenserInstruction') -> tgt.dispenserInstruction = (e.value) "xverDispenserInstructionAnnotation";
+// rule changed to Annotation -> CodeableConcept
+// src.dispenserInstruction -> tgt.dispenserInstruction; // Warning: Source Type unsupported: Annotation  (Annotation -> CodeableConcept)
+  src.doseAdministrationAid -> tgt.doseAdministrationAid;
+}
+
+
+group MedicationRequestDispenseRequestInitialFill(source src, target tgt) extends BackboneElement {
+  src.quantity -> tgt.quantity;
+  src.duration -> tgt.duration;
+}
+
+
+group MedicationRequestSubstitution(source src, target tgt) extends BackboneElement {
+  src.allowed -> tgt.allowed;
+  src.reason -> tgt.reason;
+}

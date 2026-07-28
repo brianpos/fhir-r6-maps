@@ -1,0 +1,193 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/DeviceDefinition5to6'
+/// name = 'DeviceDefinition5to6'
+/// title = 'DeviceDefinition Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/DeviceDefinition" alias DeviceDefinitionR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/DeviceDefinition" alias DeviceDefinitionR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following source properties were not read:
+    DeviceDefinition.regulatoryIdentifier.deviceIdentifier string[1..1]
+    DeviceDefinition.hasPart.reference Reference[1..1] (DeviceDefinition)
+    DeviceDefinition.languageCode CodeableConcept[0..*]
+    DeviceDefinition.owner Reference[0..1] (Organization)
+*/
+/* The following target properties were not populated:
+    DeviceDefinition.url uri[0..1]
+    DeviceDefinition.version string[0..1]
+    DeviceDefinition.versionAlgorithm[x] string,Coding[0..1]
+    DeviceDefinition.name string[0..1]
+    DeviceDefinition.title string[0..1]
+    DeviceDefinition.status code[1..1]
+    DeviceDefinition.experimental boolean[0..1]
+    DeviceDefinition.date dateTime[0..1]
+    DeviceDefinition.publisher string[0..1]
+    DeviceDefinition.useContext UsageContext[0..*]
+    DeviceDefinition.jurisdiction CodeableConcept[0..*]
+    DeviceDefinition.purpose markdown[0..1]
+    DeviceDefinition.copyright markdown[0..1]
+    DeviceDefinition.copyrightLabel string[0..1]
+    DeviceDefinition.approvalDate date[0..1]
+    DeviceDefinition.lastReviewDate date[0..1]
+    DeviceDefinition.effectivePeriod Period[0..1]
+    DeviceDefinition.udiDeviceIdentifier.deviceIdentifierSystem uri[0..1]
+    DeviceDefinition.regulatoryIdentifier.identifier string[1..1]
+    DeviceDefinition.regulatoryIdentifier.identifierSystem uri[0..1]
+    DeviceDefinition.hasPart.definition[x] canonical,CodeableConcept[1..1] (DeviceDefinition)
+    DeviceDefinition.outputLanguage code[0..*]
+    DeviceDefinition.additive BackboneElement[0..*]
+    DeviceDefinition.additive.type CodeableReference[1..1] (SubstanceDefinition)
+    DeviceDefinition.additive.quantity Quantity[0..1]
+*/
+group DeviceDefinition(source src : DeviceDefinitionR5, target tgt : DeviceDefinitionR6) extends DomainResource <<type+>> {
+  src.description -> tgt.description;
+  src.identifier -> tgt.identifier;
+  src.udiDeviceIdentifier as s -> tgt.udiDeviceIdentifier as t then DeviceDefinitionUdiDeviceIdentifier(s, t);
+  src.regulatoryIdentifier as s -> tgt.regulatoryIdentifier as t then DeviceDefinitionRegulatoryIdentifier(s, t);
+  src.partNumber -> tgt.partNumber;
+  src.manufacturer -> tgt.manufacturer;
+  src.deviceName as s -> tgt.deviceName as t then DeviceDefinitionDeviceName(s, t);
+  src.modelNumber -> tgt.modelNumber;
+  src.classification as s -> tgt.classification as t then DeviceDefinitionClassification(s, t);
+  src.conformsTo as s -> tgt.conformsTo as t then DeviceDefinitionConformsTo(s, t);
+  src.hasPart as s -> tgt.hasPart as t then DeviceDefinitionHasPart(s, t);
+  src.packaging as s -> tgt.packaging as t then DeviceDefinitionPackaging(s, t);
+  src.version as s -> tgt.deviceVersion as t then DeviceDefinitionVersion(s, t); // renamed
+  src.safety -> tgt.safety;
+  src.shelfLifeStorage -> tgt.shelfLifeStorage;
+  src.property as s -> tgt.property as t then DeviceDefinitionProperty(s, t);
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-DeviceDefinition.contact') -> tgt.contact = (e.value) "xverContactContactPoint";
+// rule changed to ContactPoint -> ContactDetail
+// src.contact -> tgt.contact; // Warning: Source Type unsupported: ContactPoint  (ContactPoint -> ContactDetail)
+  src.link as s -> tgt.link as t then DeviceDefinitionLink(s, t);
+  src.note -> tgt.note;
+  src.material as s -> tgt.material as t then DeviceDefinitionMaterial(s, t);
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-DeviceDefinition.productionIdentifierInUDI') -> tgt.productionIdentifierInUDI = (e.value) "xverProductionIdentifierInUDICode";
+// rule changed to code -> CodeableConcept
+// src.productionIdentifierInUDI -> tgt.productionIdentifierInUDI; // Warning: Source Type unsupported: code  (code -> CodeableConcept)
+  src.guideline as s -> tgt.guideline as t then DeviceDefinitionGuideline(s, t);
+  src.correctiveAction as s -> tgt.correctiveAction as t then DeviceDefinitionCorrectiveAction(s, t);
+  src.chargeItem as s -> tgt.chargeItem as t then DeviceDefinitionChargeItem(s, t);
+}
+
+
+group DeviceDefinitionUdiDeviceIdentifier(source src, target tgt) extends BackboneElement {
+  src.deviceIdentifier -> tgt.deviceIdentifier;
+  src.issuer -> tgt.issuer;
+  src.jurisdiction -> tgt.jurisdiction;
+  src.marketDistribution as s -> tgt.marketDistribution as t then DeviceDefinitionUdiDeviceIdentifierMarketDistribution(s, t);
+}
+
+
+group DeviceDefinitionUdiDeviceIdentifierMarketDistribution(source src, target tgt) extends BackboneElement {
+  src.marketPeriod -> tgt.marketPeriod;
+  src.subJurisdiction -> tgt.subJurisdiction;
+}
+
+
+group DeviceDefinitionRegulatoryIdentifier(source src, target tgt) extends BackboneElement {
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-DeviceDefinition.regulatoryIdentifier.type') -> tgt.type = (e.value) "xverTypeCode";
+// rule changed to code -> CodeableConcept
+// src.type -> tgt.type; // Warning: Source Type unsupported: code  (code -> CodeableConcept)
+  src.issuer -> tgt.issuer;
+  src.jurisdiction -> tgt.jurisdiction;
+}
+
+
+group DeviceDefinitionDeviceName(source src, target tgt) extends BackboneElement {
+  src.name -> tgt.name;
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-DeviceDefinition.deviceName.type') -> tgt.type = (e.value) "xverTypeCode";
+// rule changed to code -> CodeableConcept
+// src.type -> tgt.type; // Warning: Source Type unsupported: code  (code -> CodeableConcept)
+}
+
+
+group DeviceDefinitionClassification(source src, target tgt) extends BackboneElement {
+  src.type -> tgt.type;
+  src.justification -> tgt.justification;
+}
+
+
+group DeviceDefinitionConformsTo(source src, target tgt) extends BackboneElement {
+  src.category -> tgt.category;
+  src.specification -> tgt.specification;
+  src.version -> tgt.version;
+  src.source -> tgt.source;
+}
+
+
+group DeviceDefinitionHasPart(source src, target tgt) extends BackboneElement {
+  src.count -> tgt.count;
+}
+
+
+group DeviceDefinitionPackaging(source src, target tgt) extends BackboneElement {
+  src.identifier -> tgt.identifier;
+  src.type -> tgt.type;
+  src.count -> tgt.count;
+  src.distributor as s -> tgt.distributor as t then DeviceDefinitionPackagingDistributor(s, t);
+  src.udiDeviceIdentifier as s -> tgt.udiDeviceIdentifier as t then DeviceDefinitionUdiDeviceIdentifier(s, t);
+  src.packaging as s -> tgt.packaging as t then DeviceDefinitionPackaging(s, t);
+}
+
+
+group DeviceDefinitionPackagingDistributor(source src, target tgt) extends BackboneElement {
+  src.name -> tgt.name;
+  src.organizationReference -> tgt.organizationReference;
+}
+
+
+group DeviceDefinitionVersion(source src, target tgt) extends BackboneElement {
+  src.type -> tgt.type; // renamed
+  src.component -> tgt.component; // renamed
+  src.value -> tgt.value; // renamed
+}
+
+
+group DeviceDefinitionProperty(source src, target tgt) extends BackboneElement {
+  src.type -> tgt.type;
+  src.value -> tgt.value;
+}
+
+
+group DeviceDefinitionLink(source src, target tgt) extends BackboneElement {
+  src.relation -> tgt.relation;
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-DeviceDefinition.link.relatedDevice[x]') -> tgt.relatedDevice = (e.value) "xverRelatedDeviceCodeableReference";
+// rule changed to CodeableReference -> canonical,CodeableConcept
+// src.relatedDevice -> tgt.relatedDevice; // Warning: Source Type unsupported: CodeableReference  (CodeableReference -> canonical,CodeableConcept)
+}
+
+
+group DeviceDefinitionMaterial(source src, target tgt) extends BackboneElement {
+  src.substance -> tgt.substance;
+  src.alternate -> tgt.alternate;
+  src.allergenicIndicator -> tgt.allergenicIndicator;
+}
+
+
+group DeviceDefinitionGuideline(source src, target tgt) extends BackboneElement {
+  src.useContext -> tgt.useContext;
+  src.usageInstruction -> tgt.usageInstruction;
+  src.relatedArtifact -> tgt.relatedArtifact;
+  src.indication -> tgt.indication;
+  src.contraindication -> tgt.contraindication;
+  src.warning -> tgt.warning;
+  src.intendedUse -> tgt.intendedUse;
+}
+
+
+group DeviceDefinitionCorrectiveAction(source src, target tgt) extends BackboneElement {
+  src.recall -> tgt.recall;
+  src.scope -> tgt.scope;
+  src.period -> tgt.period;
+}
+
+
+group DeviceDefinitionChargeItem(source src, target tgt) extends BackboneElement {
+  src.chargeItemCode -> tgt.chargeItemCode;
+  src.count -> tgt.count;
+  src.effectivePeriod -> tgt.effectivePeriod;
+  src.useContext -> tgt.useContext;
+}

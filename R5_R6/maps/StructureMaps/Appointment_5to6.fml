@@ -1,0 +1,101 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/Appointment5to6'
+/// name = 'Appointment5to6'
+/// title = 'Appointment Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/Appointment" alias AppointmentR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/Appointment" alias AppointmentR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following source properties were not read:
+    Appointment.recurrenceTemplate.weeklyTemplate.monday boolean[0..1]
+    Appointment.recurrenceTemplate.weeklyTemplate.tuesday boolean[0..1]
+    Appointment.recurrenceTemplate.weeklyTemplate.wednesday boolean[0..1]
+    Appointment.recurrenceTemplate.weeklyTemplate.thursday boolean[0..1]
+    Appointment.recurrenceTemplate.weeklyTemplate.friday boolean[0..1]
+    Appointment.recurrenceTemplate.weeklyTemplate.saturday boolean[0..1]
+    Appointment.recurrenceTemplate.weeklyTemplate.sunday boolean[0..1]
+*/
+/* The following target properties were not populated:
+    Appointment.recurrenceTemplate.weeklyTemplate.daysOfWeek code[1..*]
+*/
+group Appointment(source src : AppointmentR5, target tgt : AppointmentR6) extends DomainResource <<type+>> {
+  src.identifier -> tgt.identifier;
+  src.status -> tgt.status;
+  src.cancellationReason -> tgt.cancellationReason;
+  src.class -> tgt.class;
+  src.serviceCategory -> tgt.serviceCategory;
+  src.serviceType -> tgt.serviceType;
+  src.specialty -> tgt.specialty;
+  src.appointmentType -> tgt.appointmentType;
+  src.reason -> tgt.reason; // Warning: Source TargetProfile unsupported: ImmunizationRecommendation  (Condition,Procedure,Observation,ImmunizationRecommendation -> Condition,DiagnosticReport,Procedure,Observation)
+  src.priority -> tgt.priority;
+  src.description -> tgt.description;
+  src.replaces -> tgt.replaces;
+  src.virtualService -> tgt.virtualService;
+  src.supportingInformation -> tgt.supportingInformation;
+  src.previousAppointment -> tgt.previousAppointment;
+  src.originatingAppointment -> tgt.originatingAppointment;
+  src.start -> tgt.start;
+  src.end -> tgt.end;
+  src.minutesDuration -> tgt.minutesDuration;
+  src.requestedPeriod -> tgt.requestedPeriod;
+  src.slot -> tgt.slot;
+  src.account -> tgt.account;
+  src.created -> tgt.created;
+  src.cancellationDate -> tgt.cancellationDate;
+  src.note -> tgt.note;
+  src.patientInstruction -> tgt.patientInstruction;
+  src.basedOn -> tgt.basedOn;
+  src.subject -> tgt.subject;
+  src.participant as s -> tgt.participant as t then AppointmentParticipant(s, t);
+  src.recurrenceId -> tgt.recurrenceId;
+  src.occurrenceChanged -> tgt.occurrenceChanged;
+  src.recurrenceTemplate as s -> tgt.recurrenceTemplate as t then AppointmentRecurrenceTemplate(s, t);
+}
+
+
+group AppointmentParticipant(source src, target tgt) extends BackboneElement {
+  src.type -> tgt.type;
+  src.period -> tgt.period;
+  src.actor -> tgt.actor;
+  src.required -> tgt.required;
+  src.status -> tgt.status;
+}
+
+
+group AppointmentRecurrenceTemplate(source src, target tgt) extends BackboneElement {
+  src.timezone -> tgt.timezone;
+  src.recurrenceType -> tgt.recurrenceType;
+  src.lastOccurrenceDate -> tgt.lastOccurrenceDate;
+  src.occurrenceCount -> tgt.occurrenceCount;
+  src.occurrenceDate -> tgt.occurrenceDate;
+  src.weeklyTemplate as s -> tgt.weeklyTemplate as t then AppointmentRecurrenceTemplateWeeklyTemplate(s, t);
+  src.monthlyTemplate as s -> tgt.monthlyTemplate as t then AppointmentRecurrenceTemplateMonthlyTemplate(s, t);
+  src.yearlyTemplate as s -> tgt.yearlyTemplate as t then AppointmentRecurrenceTemplateYearlyTemplate(s, t);
+  src.excludingDate -> tgt.excludingDate;
+  src.excludingRecurrenceId -> tgt.excludingRecurrenceId;
+}
+
+
+group AppointmentRecurrenceTemplateWeeklyTemplate(source src, target tgt) extends BackboneElement {
+  src.weekInterval -> tgt.weekInterval;
+}
+
+
+group AppointmentRecurrenceTemplateMonthlyTemplate(source src, target tgt) extends BackboneElement {
+  src.dayOfMonth -> tgt.dayOfMonth;
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-Appointment.recurrenceTemplate.monthlyTemplate.nthWeekOfMonth') -> tgt.nthWeekOfMonth = (e.value) "xverNthWeekOfMonthCoding";
+// rule changed to Coding -> code
+// src.nthWeekOfMonth -> tgt.nthWeekOfMonth; // Warning: Source Type unsupported: Coding  (Coding -> code)
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-Appointment.recurrenceTemplate.monthlyTemplate.dayOfWeek') -> tgt.dayOfWeek = (e.value) "xverDayOfWeekCoding";
+// rule changed to Coding -> code
+// src.dayOfWeek -> tgt.dayOfWeek; // Warning: Source Type unsupported: Coding  (Coding -> code)
+  src.monthInterval -> tgt.monthInterval;
+}
+
+
+group AppointmentRecurrenceTemplateYearlyTemplate(source src, target tgt) extends BackboneElement {
+  src.yearInterval -> tgt.yearInterval;
+}

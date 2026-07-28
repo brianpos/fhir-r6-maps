@@ -1,0 +1,55 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/DataRequirement5to6'
+/// name = 'DataRequirement5to6'
+/// title = 'DataRequirement Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/DataRequirement" alias DataRequirementR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/DataRequirement" alias DataRequirementR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group DataRequirement(source src : DataRequirementR5, target tgt : DataRequirementR6) extends DataType <<type+>> {
+  src.type -> tgt.type;
+  src.profile -> tgt.profile;
+  src.subject -> tgt.subject;
+  src.mustSupport -> tgt.mustSupport;
+  src.codeFilter as s -> tgt.codeFilter as t then DataRequirementCodeFilter(s, t);
+  src.dateFilter as s -> tgt.dateFilter as t then DataRequirementDateFilter(s, t);
+  src.valueFilter as s -> tgt.valueFilter as t then DataRequirementValueFilter(s, t);
+  src.limit -> tgt.limit;
+  src.sort as s -> tgt.sort as t then DataRequirementSort(s, t);
+}
+
+
+group DataRequirementCodeFilter(source src, target tgt) extends Element {
+  src.path -> tgt.path;
+  src.searchParam -> tgt.searchParam;
+  src.valueSet -> tgt.valueSet;
+  src.code -> tgt.code;
+}
+
+
+group DataRequirementDateFilter(source src, target tgt) extends Element {
+  src.path -> tgt.path;
+  src.searchParam -> tgt.searchParam;
+  src.value -> tgt.value;
+}
+
+
+group DataRequirementValueFilter(source src, target tgt) extends Element {
+  src.path -> tgt.path;
+  src.searchParam -> tgt.searchParam;
+  src.comparator -> tgt.comparator;
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-DataRequirement.valueFilter.value[x]') -> tgt.value = (e.value) "xverValueDateTime";
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-DataRequirement.valueFilter.value[x]') -> tgt.value = (e.value) "xverValuePeriod";
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-DataRequirement.valueFilter.value[x]') -> tgt.value = (e.value) "xverValueDuration";
+// rule changed to dateTime,Period,Duration -> boolean,integer,string,Quantity,Range,Ratio,RatioRange
+// src.value -> tgt.value; // Warning: Source Type unsupported: dateTime,Period,Duration  (dateTime,Period,Duration -> boolean,integer,string,Quantity,Range,Ratio,RatioRange)
+}
+
+
+group DataRequirementSort(source src, target tgt) extends Element {
+  src.path -> tgt.path;
+  src.direction -> tgt.direction;
+}

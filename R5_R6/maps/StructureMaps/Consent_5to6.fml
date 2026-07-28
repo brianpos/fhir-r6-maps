@@ -1,0 +1,75 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/Consent5to6'
+/// name = 'Consent5to6'
+/// title = 'Consent Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/Consent" alias ConsentR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/Consent" alias ConsentR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following source properties were not read:
+    Consent.provision.expression Expression[0..1]
+*/
+group Consent(source src : ConsentR5, target tgt : ConsentR6) extends DomainResource <<type+>> {
+  src.identifier -> tgt.identifier;
+  src.status -> tgt.status;
+  src.category -> tgt.category;
+  src.subject -> tgt.subject;
+  src.date -> tgt.date;
+  src.period -> tgt.period;
+  src.grantor -> tgt.grantor;
+  src.grantee -> tgt.grantee;
+  src.manager -> tgt.manager;
+  src.controller -> tgt.controller;
+  src.sourceAttachment -> tgt.sourceAttachment;
+  src.sourceReference -> tgt.sourceReference; // Warning: Source TargetProfile unsupported: Contract  (Consent,DocumentReference,Contract,QuestionnaireResponse -> Consent,DocumentReference,QuestionnaireResponse)
+  src.regulatoryBasis -> tgt.regulatoryBasis;
+  src.policyBasis as s -> tgt.policyBasis as t then ConsentPolicyBasis(s, t);
+  src.policyText -> tgt.policyText;
+  src.verification as s -> tgt.verification as t then ConsentVerification(s, t);
+  src.decision -> tgt.decision;
+  src.provision as s -> tgt.provision as t then ConsentProvision(s, t);
+}
+
+
+group ConsentPolicyBasis(source src, target tgt) extends BackboneElement {
+  src.reference -> tgt.reference;
+  src.url -> tgt.uri; // renamed
+}
+
+
+group ConsentVerification(source src, target tgt) extends BackboneElement {
+  src.verified -> tgt.verified;
+  src.verificationType -> tgt.type; // renamed
+  src.verifiedBy -> tgt.verifiedBy;
+  src.verifiedWith -> tgt.verifiedWith;
+  src.verificationDate -> tgt.date; // renamed
+}
+
+
+group ConsentProvision(source src, target tgt) extends BackboneElement {
+  src.period -> tgt.period;
+  src.actor as s -> tgt.actor as t then ConsentProvisionActor(s, t);
+  src.action -> tgt.action;
+  src.securityLabel -> tgt.securityLabel;
+  src.purpose -> tgt.purpose;
+  src.documentType -> tgt.documentType;
+  src.resourceType -> tgt.resourceType;
+  src.code -> tgt.code;
+  src.dataPeriod -> tgt.dataPeriod;
+  src.data as s -> tgt.data as t then ConsentProvisionData(s, t);
+  src.provision as s -> tgt.provision as t then ConsentProvision(s, t);
+}
+
+
+group ConsentProvisionActor(source src, target tgt) extends BackboneElement {
+  src.role -> tgt.role;
+  src.reference -> tgt.reference;
+}
+
+
+group ConsentProvisionData(source src, target tgt) extends BackboneElement {
+  src.meaning -> tgt.meaning;
+  src.reference -> tgt.reference;
+}

@@ -1,0 +1,124 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/ResearchStudy5to6'
+/// name = 'ResearchStudy5to6'
+/// title = 'ResearchStudy Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/ResearchStudy" alias ResearchStudyR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/ResearchStudy" alias ResearchStudyR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following source properties were not read:
+    ResearchStudy.relatedArtifact RelatedArtifact[0..*]
+    ResearchStudy.primaryPurposeType CodeableConcept[0..1]
+    ResearchStudy.comparisonGroup.linkId id[0..1]
+    ResearchStudy.comparisonGroup.type CodeableConcept[0..1]
+    ResearchStudy.comparisonGroup.intendedExposure Reference[0..*] (EvidenceVariable)
+    ResearchStudy.outcomeMeasure BackboneElement[0..*]
+    ResearchStudy.outcomeMeasure.name string[0..1]
+    ResearchStudy.outcomeMeasure.type CodeableConcept[0..*]
+    ResearchStudy.outcomeMeasure.description markdown[0..1]
+    ResearchStudy.outcomeMeasure.reference Reference[0..1] (EvidenceVariable)
+*/
+/* The following target properties were not populated:
+    ResearchStudy.label.language code[0..1]
+    ResearchStudy.citeAs markdown[0..1]
+    ResearchStudy.relatesTo BackboneElement[0..*]
+    ResearchStudy.relatesTo.type CodeableConcept[1..1]
+    ResearchStudy.relatesTo.target[x] uri,Attachment,canonical,Reference,markdown[1..1] (Resource,Resource)
+    ResearchStudy.purposeType CodeableConcept[0..*]
+    ResearchStudy.recruitment.description markdown[0..1]
+    ResearchStudy.comparisonGroup.targetNumber unsignedInt[0..1]
+    ResearchStudy.comparisonGroup.actualNumber unsignedInt[0..1]
+    ResearchStudy.comparisonGroup.eligibility Reference[0..1] (Group)
+    ResearchStudy.objective.outcomeMeasure BackboneElement[0..*]
+    ResearchStudy.objective.outcomeMeasure.name string[0..1]
+    ResearchStudy.objective.outcomeMeasure.type CodeableConcept[0..1]
+    ResearchStudy.objective.outcomeMeasure.description markdown[0..1]
+    ResearchStudy.objective.outcomeMeasure.endpoint Reference[1..1] (EvidenceVariable)
+    ResearchStudy.objective.outcomeMeasure.population Reference[0..1] (Group)
+    ResearchStudy.objective.outcomeMeasure.intervention Reference[0..1] (Group)
+    ResearchStudy.objective.outcomeMeasure.comparator Reference[0..1] (Group)
+    ResearchStudy.objective.outcomeMeasure.summaryMeasure CodeableConcept[0..1]
+    ResearchStudy.objective.outcomeMeasure.endpointAnalysisPlan Reference[0..1] (Evidence)
+    ResearchStudy.objective.outcomeMeasure.eventHandling BackboneElement[0..*]
+    ResearchStudy.objective.outcomeMeasure.eventHandling.event CodeableConcept[0..1]
+    ResearchStudy.objective.outcomeMeasure.eventHandling.group CodeableConcept[0..1]
+    ResearchStudy.objective.outcomeMeasure.eventHandling.handling CodeableConcept[0..1]
+    ResearchStudy.objective.outcomeMeasure.eventHandling.description markdown[0..1]
+*/
+group ResearchStudy(source src : ResearchStudyR5, target tgt : ResearchStudyR6) extends DomainResource <<type+>> {
+  src.url -> tgt.url;
+  src.identifier -> tgt.identifier;
+  src.version -> tgt.version;
+  src.name -> tgt.name;
+  src.title -> tgt.title;
+  src.label as s -> tgt.label as t then ResearchStudyLabel(s, t);
+  src.protocol -> tgt.protocol;
+  src.partOf -> tgt.partOf;
+  src.date -> tgt.date;
+  src.status -> tgt.status;
+  src.phase -> tgt.phase;
+  src.studyDesign -> tgt.studyDesign;
+  src.focus -> tgt.focus; // Warning: Source TargetProfile unsupported: EvidenceVariable  (Medication,MedicinalProductDefinition,SubstanceDefinition,EvidenceVariable -> Medication,MedicinalProductDefinition,SubstanceDefinition,DeviceDefinition,PlanDefinition)
+  src.condition -> tgt.condition;
+  src.keyword -> tgt.keyword;
+  src.region -> tgt.region;
+  src.descriptionSummary -> tgt.descriptionSummary;
+  src.description -> tgt.description;
+  src.period -> tgt.period;
+  src.site -> tgt.site;
+  src.note -> tgt.note;
+  src.classifier -> tgt.classifier;
+  src.associatedParty as s -> tgt.associatedParty as t then ResearchStudyAssociatedParty(s, t);
+  src.progressStatus as s -> tgt.progressStatus as t then ResearchStudyProgressStatus(s, t);
+  src.whyStopped -> tgt.whyStopped;
+  src.recruitment as s -> tgt.recruitment as t then ResearchStudyRecruitment(s, t);
+  src.comparisonGroup as s -> tgt.comparisonGroup as t then ResearchStudyComparisonGroup(s, t);
+  src.objective as s -> tgt.objective as t then ResearchStudyObjective(s, t);
+  src.result -> tgt.result; // Warning: Source TargetProfile unsupported: EvidenceReport,Citation  (EvidenceReport,Citation,DiagnosticReport -> Composition,DiagnosticReport,DocumentReference,Evidence)
+}
+
+
+group ResearchStudyLabel(source src, target tgt) extends BackboneElement {
+  src.type -> tgt.type;
+  src.value -> tgt.value;
+}
+
+
+group ResearchStudyAssociatedParty(source src, target tgt) extends BackboneElement {
+  src.name -> tgt.name;
+  src.role -> tgt.role;
+  src.period -> tgt.period;
+  src.classifier -> tgt.classifier;
+  src.party -> tgt.party;
+}
+
+
+group ResearchStudyProgressStatus(source src, target tgt) extends BackboneElement {
+  src.state -> tgt.state;
+  src.actual -> tgt.actual;
+  src.period -> tgt.period;
+}
+
+
+group ResearchStudyRecruitment(source src, target tgt) extends BackboneElement {
+  src.targetNumber -> tgt.targetNumber;
+  src.actualNumber -> tgt.actualNumber;
+  src.eligibility -> tgt.eligibility; // Warning: Source TargetProfile unsupported: EvidenceVariable  (Group,EvidenceVariable -> Group)
+  src.actualGroup -> tgt.actualGroup;
+}
+
+
+group ResearchStudyComparisonGroup(source src, target tgt) extends BackboneElement {
+  src.name -> tgt.name;
+  src.description -> tgt.description;
+  src.observedGroup -> tgt.observedGroup;
+}
+
+
+group ResearchStudyObjective(source src, target tgt) extends BackboneElement {
+  src.name -> tgt.name;
+  src.type -> tgt.type;
+  src.description -> tgt.description;
+}

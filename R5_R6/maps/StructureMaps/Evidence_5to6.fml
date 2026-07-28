@@ -1,0 +1,137 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/Evidence5to6'
+/// name = 'Evidence5to6'
+/// title = 'Evidence Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/Evidence" alias EvidenceR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/Evidence" alias EvidenceR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following source properties were not read:
+    Evidence.relatedArtifact RelatedArtifact[0..*]
+*/
+/* The following target properties were not populated:
+    Evidence.recorder ContactDetail[0..*]
+    Evidence.relatesTo BackboneElement[0..*]
+    Evidence.relatesTo.type CodeableConcept[1..1]
+    Evidence.relatesTo.target[x] uri,Attachment,canonical,Reference,markdown[1..1] (Resource,Resource)
+    Evidence.classification BackboneElement[0..*]
+    Evidence.classification.type CodeableConcept[0..1]
+    Evidence.classification.classifier CodeableReference[0..*] (Resource)
+    Evidence.variableDefinition.roleSubtype CodeableConcept[0..1]
+    Evidence.variableDefinition.comparatorCategory string[0..1]
+    Evidence.statistic.sampleSize.numberAnalyzed unsignedInt[0..1]
+    Evidence.statistic.modelCharacteristic.intended boolean[0..1]
+    Evidence.statistic.modelCharacteristic.applied boolean[0..1]
+*/
+group Evidence(source src : EvidenceR5, target tgt : EvidenceR6) extends DomainResource <<type+>> {
+  src.url -> tgt.url;
+  src.identifier -> tgt.identifier;
+  src.version -> tgt.version;
+  src.versionAlgorithm -> tgt.versionAlgorithm;
+  src.name -> tgt.name;
+  src.title -> tgt.title;
+  src.citeAs : markdown -> tgt.citeAs;
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-Evidence.citeAs') -> tgt.citeAs = (e.value) "xverCiteAsReference";
+// rule changed to Reference,markdown -> markdown
+// src.citeAs -> tgt.citeAs; // Warning: Source Type unsupported: Reference  (Reference,markdown -> markdown)
+  src.status -> tgt.status;
+  src.experimental -> tgt.experimental;
+  src.date -> tgt.date;
+  src.approvalDate -> tgt.approvalDate;
+  src.lastReviewDate -> tgt.lastReviewDate;
+  src.publisher -> tgt.publisher;
+  src.contact -> tgt.contact;
+  src.author -> tgt.author;
+  src.editor -> tgt.editor;
+  src.reviewer -> tgt.reviewer;
+  src.endorser -> tgt.endorser;
+  src.useContext -> tgt.useContext;
+  src.purpose -> tgt.purpose;
+  src.copyright -> tgt.copyright;
+  src.copyrightLabel -> tgt.copyrightLabel;
+  src.description -> tgt.description;
+  src.assertion -> tgt.assertion;
+  src.note -> tgt.note;
+  src.variableDefinition as s -> tgt.variableDefinition as t then EvidenceVariableDefinition(s, t);
+  src.synthesisType -> tgt.synthesisType;
+  src.studyDesign -> tgt.studyDesign;
+  src.statistic as s -> tgt.statistic as t then EvidenceStatistic(s, t);
+  src.certainty as s -> tgt.certainty as t then EvidenceCertainty(s, t);
+}
+
+
+group EvidenceVariableDefinition(source src, target tgt) extends BackboneElement {
+  src.description -> tgt.description;
+  src.note -> tgt.note;
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-Evidence.variableDefinition.variableRole') -> tgt.variableRole = (e.value) "xverVariableRoleCodeableConcept";
+// rule changed to CodeableConcept -> code
+// src.variableRole -> tgt.variableRole; // Warning: Source Type unsupported: CodeableConcept  (CodeableConcept -> code)
+  src.observed -> tgt.observed;
+  src.intended -> tgt.intended;
+  src.directnessMatch -> tgt.directnessMatch;
+}
+
+
+group EvidenceStatistic(source src, target tgt) extends BackboneElement {
+  src.description -> tgt.description;
+  src.note -> tgt.note;
+  src.statisticType -> tgt.statisticType;
+  src.category -> tgt.category;
+  src.quantity -> tgt.quantity;
+  src.numberOfEvents -> tgt.numberOfEvents;
+  src.numberAffected -> tgt.numberAffected;
+  src.sampleSize as s -> tgt.sampleSize as t then EvidenceStatisticSampleSize(s, t);
+  src.attributeEstimate as s -> tgt.attributeEstimate as t then EvidenceStatisticAttributeEstimate(s, t);
+  src.modelCharacteristic as s -> tgt.modelCharacteristic as t then EvidenceStatisticModelCharacteristic(s, t);
+}
+
+
+group EvidenceStatisticSampleSize(source src, target tgt) extends BackboneElement {
+  src.description -> tgt.description;
+  src.note -> tgt.note;
+  src.numberOfStudies -> tgt.numberOfStudies;
+  src.numberOfParticipants -> tgt.numberOfParticipants;
+  src.knownDataCount -> tgt.knownDataCount;
+}
+
+
+group EvidenceStatisticAttributeEstimate(source src, target tgt) extends BackboneElement {
+  src.description -> tgt.description;
+  src.note -> tgt.note;
+  src.type -> tgt.type;
+  src.quantity -> tgt.quantity;
+  src.level -> tgt.level;
+  src.range -> tgt.range;
+  src.attributeEstimate as s -> tgt.attributeEstimate as t then EvidenceStatisticAttributeEstimate(s, t);
+}
+
+
+group EvidenceStatisticModelCharacteristic(source src, target tgt) extends BackboneElement {
+  src.code -> tgt.code;
+  src.value -> tgt.value;
+  src.variable as s -> tgt.variable as t then EvidenceStatisticModelCharacteristicVariable(s, t);
+  src.attributeEstimate as s -> tgt.attribute as t then EvidenceStatisticAttributeEstimate(s, t);
+}
+
+
+group EvidenceStatisticModelCharacteristicVariable(source src, target tgt) extends BackboneElement {
+  src.variableDefinition -> tgt.variableDefinition;
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-Evidence.statistic.modelCharacteristic.variable.handling') -> tgt.handling = (e.value) "xverHandlingCode";
+// rule changed to code -> CodeableConcept
+// src.handling -> tgt.handling; // Warning: Source Type unsupported: code  (code -> CodeableConcept)
+  src.valueCategory -> tgt.valueCategory;
+  src.valueQuantity -> tgt.valueQuantity;
+  src.valueRange -> tgt.valueRange;
+}
+
+
+group EvidenceCertainty(source src, target tgt) extends BackboneElement {
+  src.description -> tgt.description;
+  src.note -> tgt.note;
+  src.type -> tgt.type;
+  src.rating -> tgt.rating;
+  src.rater -> tgt.rater;
+  src.subcomponent as s -> tgt.subcomponent as t then EvidenceCertainty(s, t);
+}

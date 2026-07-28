@@ -1,0 +1,13 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/Distance5to6'
+/// name = 'Distance5to6'
+/// title = 'Distance Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/Distance" alias DistanceR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/Distance" alias DistanceR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group Distance(source src : DistanceR5, target tgt : DistanceR6) extends Quantity <<type+>> {
+}

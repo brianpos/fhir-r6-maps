@@ -1,0 +1,13 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/uuid5to6'
+/// name = 'uuid5to6'
+/// title = 'uuid Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/uuid" alias uuidR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/uuid" alias uuidR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group Uuid(source src : uuidR5, target tgt : uuidR6) extends Uri <<type+>> {
+}

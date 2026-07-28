@@ -1,0 +1,16 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/ProductShelfLife5to6'
+/// name = 'ProductShelfLife5to6'
+/// title = 'ProductShelfLife Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/ProductShelfLife" alias ProductShelfLifeR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/ProductShelfLife" alias ProductShelfLifeR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group ProductShelfLife(source src : ProductShelfLifeR5, target tgt : ProductShelfLifeR6) extends BackboneType <<type+>> {
+  src.type -> tgt.type;
+  src.period -> tgt.period;
+  src.specialPrecautionsForStorage -> tgt.specialPrecautionsForStorage;
+}

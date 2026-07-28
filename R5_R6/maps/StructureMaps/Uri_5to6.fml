@@ -1,0 +1,14 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/uri5to6'
+/// name = 'uri5to6'
+/// title = 'uri Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/uri" alias uriR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/uri" alias uriR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group Uri(source src : uriR5, target tgt : uriR6) extends PrimitiveType <<type+>> {
+  src.value -> tgt.value;
+}

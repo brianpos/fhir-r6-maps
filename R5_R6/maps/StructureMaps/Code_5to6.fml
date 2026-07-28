@@ -1,0 +1,13 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/code5to6'
+/// name = 'code5to6'
+/// title = 'code Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/code" alias codeR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/code" alias codeR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group Code(source src : codeR5, target tgt : codeR6) extends String <<type+>> {
+}

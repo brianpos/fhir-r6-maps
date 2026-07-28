@@ -1,0 +1,40 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/Location5to6'
+/// name = 'Location5to6'
+/// title = 'Location Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/Location" alias LocationR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/Location" alias LocationR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following target properties were not populated:
+    Location.code CodeableConcept[0..*]
+*/
+group Location(source src : LocationR5, target tgt : LocationR6) extends DomainResource <<type+>> {
+  src.identifier -> tgt.identifier;
+  src.status -> tgt.status;
+  src.operationalStatus -> tgt.operationalStatus;
+  src.name -> tgt.name;
+  src.alias -> tgt.alias;
+  src.description -> tgt.description;
+  src.mode -> tgt.mode;
+  src.type -> tgt.type;
+  src.contact -> tgt.contact;
+  src.address -> tgt.address;
+  src.form -> tgt.form;
+  src.position as s -> tgt.position as t then LocationPosition(s, t);
+  src.managingOrganization -> tgt.managingOrganization;
+  src.partOf -> tgt.partOf;
+  src.characteristic -> tgt.characteristic;
+  src.hoursOfOperation /* [0..*] */ -> tgt.hoursOfOperation /* [0..1] */; // Warning: source repeating, target single-valued
+  src.virtualService -> tgt.virtualService;
+  src.endpoint -> tgt.endpoint;
+}
+
+
+group LocationPosition(source src, target tgt) extends BackboneElement {
+  src.longitude -> tgt.longitude;
+  src.latitude -> tgt.latitude;
+  src.altitude -> tgt.altitude;
+}

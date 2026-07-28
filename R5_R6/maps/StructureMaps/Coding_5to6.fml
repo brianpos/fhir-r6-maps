@@ -1,0 +1,18 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/Coding5to6'
+/// name = 'Coding5to6'
+/// title = 'Coding Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/Coding" alias CodingR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/Coding" alias CodingR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group Coding(source src : CodingR5, target tgt : CodingR6) extends DataType <<type+>> {
+  src.system -> tgt.system;
+  src.version -> tgt.version;
+  src.code -> tgt.code;
+  src.display -> tgt.display;
+  src.userSelected -> tgt.userSelected;
+}

@@ -1,0 +1,71 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/PaymentReconciliation5to6'
+/// name = 'PaymentReconciliation5to6'
+/// title = 'PaymentReconciliation Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/PaymentReconciliation" alias PaymentReconciliationR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/PaymentReconciliation" alias PaymentReconciliationR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following target properties were not populated:
+    PaymentReconciliation.statusReason string[0..1]
+    PaymentReconciliation.allocation.characteristics Reference[0..1] (Observation)
+    PaymentReconciliation.allocation.noteNumber positiveInt[0..*]
+    PaymentReconciliation.processNote.class CodeableConcept[0..1]
+    PaymentReconciliation.processNote.number positiveInt[0..1]
+*/
+group PaymentReconciliation(source src : PaymentReconciliationR5, target tgt : PaymentReconciliationR6) extends DomainResource <<type+>> {
+  src.identifier -> tgt.identifier;
+  src.type -> tgt.type;
+  src.status -> tgt.status;
+  src.kind -> tgt.kind;
+  src.period -> tgt.period;
+  src.created -> tgt.created;
+  src.enterer -> tgt.enterer;
+  src.issuerType -> tgt.issuerType;
+  src.paymentIssuer -> tgt.paymentIssuer;
+  src.request -> tgt.request;
+  src.requestor -> tgt.requestor;
+  src.outcome -> tgt.outcome;
+  src.disposition -> tgt.disposition;
+  src.date -> tgt.date;
+  src.location -> tgt.location;
+  src.method -> tgt.method;
+  src.cardBrand -> tgt.cardBrand;
+  src.accountNumber -> tgt.accountNumber;
+  src.expirationDate -> tgt.expirationDate;
+  src.processor -> tgt.processor;
+  src.referenceNumber -> tgt.referenceNumber;
+  src.authorization -> tgt.authorization;
+  src.tenderedAmount -> tgt.tenderedAmount;
+  src.returnedAmount -> tgt.returnedAmount;
+  src.amount -> tgt.amount;
+  src.paymentIdentifier -> tgt.paymentIdentifier;
+  src.allocation as s -> tgt.allocation as t then PaymentReconciliationAllocation(s, t);
+  src.formCode -> tgt.formCode;
+  src.processNote as s -> tgt.processNote as t then PaymentReconciliationProcessNote(s, t);
+}
+
+
+group PaymentReconciliationAllocation(source src, target tgt) extends BackboneElement {
+  src.identifier -> tgt.identifier;
+  src.predecessor -> tgt.predecessor;
+  src.target -> tgt.target; // Warning: Source TargetProfile unsupported: Invoice,ChargeItem,Contract  (Claim,Account,Invoice,ChargeItem,Encounter,Contract -> Claim,Account,Encounter,Patient,Group)
+  src.targetItem -> tgt.targetItem;
+  src.encounter -> tgt.encounter;
+  src.account -> tgt.account;
+  src.type -> tgt.type;
+  src.submitter -> tgt.submitter;
+  src.response -> tgt.response;
+  src.date -> tgt.date;
+  src.responsible -> tgt.responsible;
+  src.payee -> tgt.payee;
+  src.amount -> tgt.amount;
+}
+
+
+group PaymentReconciliationProcessNote(source src, target tgt) extends BackboneElement {
+  src.type -> tgt.type;
+  src.text -> tgt.text;
+}

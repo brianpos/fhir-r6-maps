@@ -1,0 +1,13 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/DataType5to6'
+/// name = 'DataType5to6'
+/// title = 'DataType Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/DataType" alias DataTypeR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/DataType" alias DataTypeR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group DataType(source src : DataTypeR5, target tgt : DataTypeR6) extends Element <<type+>> {
+}

@@ -1,0 +1,18 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/Expression5to6'
+/// name = 'Expression5to6'
+/// title = 'Expression Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/Expression" alias ExpressionR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/Expression" alias ExpressionR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group Expression(source src : ExpressionR5, target tgt : ExpressionR6) extends DataType <<type+>> {
+  src.description -> tgt.description;
+  src.name -> tgt.name;
+  src.language -> tgt.language;
+  src.expression -> tgt.expression;
+  src.reference -> tgt.reference;
+}

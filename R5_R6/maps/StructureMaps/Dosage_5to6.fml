@@ -1,0 +1,39 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/Dosage5to6'
+/// name = 'Dosage5to6'
+/// title = 'Dosage Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/Dosage" alias DosageR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/Dosage" alias DosageR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following source properties were not read:
+    Dosage.sequence integer[0..1]
+    Dosage.maxDosePerPeriod Ratio[0..*]
+    Dosage.maxDosePerAdministration Quantity[0..1]
+    Dosage.maxDosePerLifetime Quantity[0..1]
+*/
+/* The following target properties were not populated:
+    Dosage.condition DosageCondition[0..*]
+    Dosage.safety DosageSafety[0..1]
+*/
+group Dosage(source src : DosageR5, target tgt : DosageR6) extends BackboneType <<type+>> {
+  src.text -> tgt.text;
+  src.additionalInstruction -> tgt.additionalInstruction;
+  src.patientInstruction -> tgt.patientInstruction;
+  src.timing -> tgt.timing;
+  src.asNeeded -> tgt.asNeeded;
+  src.asNeededFor -> tgt.asNeededFor;
+  src.site -> tgt.site;
+  src.route -> tgt.route;
+  src.method -> tgt.method;
+  src.doseAndRate as s -> tgt.doseAndRate as t then DosageDoseAndRate(s, t);
+}
+
+
+group DosageDoseAndRate(source src, target tgt) extends Element {
+  src.type -> tgt.type;
+  src.dose -> tgt.dose;
+  src.rate -> tgt.rate;
+}

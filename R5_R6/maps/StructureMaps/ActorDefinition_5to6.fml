@@ -1,0 +1,39 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/ActorDefinition5to6'
+/// name = 'ActorDefinition5to6'
+/// title = 'ActorDefinition Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/ActorDefinition" alias ActorDefinitionR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/ActorDefinition" alias ActorDefinitionR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following source properties were not read:
+    ActorDefinition.capabilities canonical[0..1] (CapabilityStatement)
+*/
+/* The following target properties were not populated:
+    ActorDefinition.category CodeableConcept[0..*]
+*/
+group ActorDefinition(source src : ActorDefinitionR5, target tgt : ActorDefinitionR6) extends DomainResource <<type+>> {
+  src.url -> tgt.url;
+  src.identifier -> tgt.identifier;
+  src.version -> tgt.version;
+  src.versionAlgorithm -> tgt.versionAlgorithm;
+  src.name -> tgt.name;
+  src.title -> tgt.title;
+  src.status -> tgt.status;
+  src.experimental -> tgt.experimental;
+  src.date -> tgt.date;
+  src.publisher -> tgt.publisher;
+  src.contact -> tgt.contact;
+  src.description -> tgt.description;
+  src.useContext -> tgt.useContext;
+  src.jurisdiction -> tgt.jurisdiction;
+  src.purpose -> tgt.purpose;
+  src.copyright -> tgt.copyright;
+  src.copyrightLabel -> tgt.copyrightLabel;
+  src.type -> tgt.type;
+  src.documentation -> tgt.documentation;
+  src.reference -> tgt.reference;
+  src.derivedFrom -> tgt.baseDefinition; // renamed
+}

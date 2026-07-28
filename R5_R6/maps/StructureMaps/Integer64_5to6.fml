@@ -1,0 +1,16 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/integer645to6'
+/// name = 'integer645to6'
+/// title = 'integer64 Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/integer64" alias integer64R5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/integer64" alias integer64R6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group Integer64(source src : integer64R5, target tgt : integer64R6) extends PrimitiveType <<type+>> {
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-integer64.value') -> tgt.value = (e.value) "xverValueInteger";
+// rule changed to http://hl7.org/fhirpath/System.Integer -> http://hl7.org/fhirpath/System.Long
+// src.value -> tgt.value; // Warning: Source Type unsupported: http://hl7.org/fhirpath/System.Integer  (http://hl7.org/fhirpath/System.Integer -> http://hl7.org/fhirpath/System.Long)
+}

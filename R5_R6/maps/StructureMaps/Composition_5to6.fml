@@ -1,0 +1,89 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/Composition5to6'
+/// name = 'Composition5to6'
+/// title = 'Composition Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/Composition" alias CompositionR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/Composition" alias CompositionR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following source properties were not read:
+    Composition.relatesTo.classifier CodeableConcept[0..*]
+    Composition.relatesTo.label string[0..1]
+    Composition.relatesTo.display string[0..1]
+    Composition.relatesTo.citation markdown[0..1]
+    Composition.relatesTo.document Attachment[0..1]
+    Composition.relatesTo.resource canonical[0..1] (Resource)
+    Composition.relatesTo.resourceReference Reference[0..1] (Resource)
+    Composition.relatesTo.publicationStatus code[0..1]
+    Composition.relatesTo.publicationDate date[0..1]
+*/
+/* The following target properties were not populated:
+    Composition.consent Reference[0..*] (Consent)
+    Composition.basedOn Reference[0..*] (Appointment,AppointmentResponse,CarePlan,Claim,CommunicationRequest,CoverageEligibilityRequest,DeviceRequest,MedicationRequest,NutritionOrder,RequestOrchestration,ServiceRequest,Task,VisionPrescription)
+    Composition.participant BackboneElement[0..*]
+    Composition.participant.type CodeableConcept[1..*]
+    Composition.participant.function CodeableConcept[0..*]
+    Composition.participant.time Period[0..1]
+    Composition.participant.party Reference[1..1] (Practitioner,PractitionerRole,Patient,RelatedPerson,Device,Organization,CareTeam,Group)
+    Composition.classification BackboneElement[0..*]
+    Composition.classification.type CodeableConcept[0..1]
+    Composition.classification.classifier CodeableReference[0..*] (Resource)
+    Composition.relatesTo.target[x] uri,Attachment,canonical,Reference,markdown[1..1] (Resource,Resource)
+    Composition.section.note Annotation[0..*]
+*/
+group Composition(source src : CompositionR5, target tgt : CompositionR6) extends DomainResource <<type+>> {
+  src.url -> tgt.url;
+  src.identifier -> tgt.identifier;
+  src.version -> tgt.version;
+  src.status -> tgt.status;
+  src.type -> tgt.type;
+  src.category -> tgt.category;
+  src.subject -> tgt.subject;
+  src.encounter -> tgt.encounter;
+  src.date -> tgt.date;
+  src.useContext -> tgt.useContext;
+  src.author -> tgt.author;
+  src.name -> tgt.name;
+  src.title -> tgt.title;
+  src.note -> tgt.note;
+  src.attester as s -> tgt.attester as t then CompositionAttester(s, t);
+  src.custodian -> tgt.custodian;
+  src.relatesTo as s -> tgt.relatesTo as t then CompositionRelatesTo(s, t); // Warning: type changed (RelatedArtifact -> BackboneElement)
+  src.event as s -> tgt.event as t then CompositionEvent(s, t);
+  src.section as s -> tgt.section as t then CompositionSection(s, t);
+}
+
+
+group CompositionAttester(source src, target tgt) extends BackboneElement {
+  src.mode -> tgt.mode;
+  src.time -> tgt.time;
+  src.party -> tgt.party;
+}
+
+
+group CompositionRelatesTo(source src, target tgt) extends BackboneElement {
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-Composition.relatesTo.type') -> tgt.type = (e.value) "xverTypeCode";
+// rule changed to code -> CodeableConcept
+// src.type -> tgt.type; // Warning: Source Type unsupported: code  (code -> CodeableConcept)
+}
+
+
+group CompositionEvent(source src, target tgt) extends BackboneElement {
+  src.period -> tgt.period;
+  src.detail -> tgt.detail;
+}
+
+
+group CompositionSection(source src, target tgt) extends BackboneElement {
+  src.title -> tgt.title;
+  src.code -> tgt.code;
+  src.author -> tgt.author;
+  src.focus -> tgt.focus;
+  src.text -> tgt.text;
+  src.orderedBy -> tgt.orderedBy;
+  src.entry -> tgt.entry;
+  src.emptyReason -> tgt.emptyReason;
+  src.section as s -> tgt.section as t then CompositionSection(s, t);
+}

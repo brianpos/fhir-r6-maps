@@ -1,0 +1,102 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/MeasureReport5to6'
+/// name = 'MeasureReport5to6'
+/// title = 'MeasureReport Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/MeasureReport" alias MeasureReportR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/MeasureReport" alias MeasureReportR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following source properties were not read:
+    MeasureReport.scoring CodeableConcept[0..1]
+    MeasureReport.improvementNotation CodeableConcept[0..1]
+*/
+/* The following target properties were not populated:
+    MeasureReport.category CodeableConcept[0..1]
+    MeasureReport.messages Reference[0..1] (OperationOutcome)
+    MeasureReport.group.title string[0..1]
+    MeasureReport.group.calculatedDate dateTime[0..1]
+    MeasureReport.group.description markdown[0..1]
+    MeasureReport.group.type CodeableConcept[0..1]
+    MeasureReport.group.scoring CodeableConcept[0..1]
+    MeasureReport.group.compositeScoring CodeableConcept[0..1]
+    MeasureReport.group.improvementNotation CodeableConcept[0..1]
+    MeasureReport.group.improvementNotationGuidance markdown[0..1]
+    MeasureReport.group.population.title string[0..1]
+    MeasureReport.group.population.description markdown[0..1]
+    MeasureReport.group.population.countQuantity Quantity[0..1]
+    MeasureReport.group.stratifier.title string[0..1]
+    MeasureReport.group.stratifier.description markdown[0..1]
+    MeasureReport.group.stratifier.stratum.component.description markdown[0..1]
+    MeasureReport.group.stratifier.stratum.population.countQuantity Quantity[0..1]
+*/
+group MeasureReport(source src : MeasureReportR5, target tgt : MeasureReportR6) extends DomainResource <<type+>> {
+  src.identifier -> tgt.identifier;
+  src.status -> tgt.status;
+  src.type -> tgt.type;
+  src.dataUpdateType -> tgt.dataUpdateType;
+  src.measure -> tgt.measure;
+  src.subject -> tgt.subject;
+  src.date -> tgt.date;
+  src.reporter -> tgt.reporter; // Warning: Source TargetProfile unsupported: Group  (Practitioner,PractitionerRole,Organization,Group -> Practitioner,PractitionerRole,Organization)
+  src.reportingVendor -> tgt.reportingVendor;
+  src.location -> tgt.location;
+  src.period -> tgt.period;
+  src.inputParameters -> tgt.inputParameters;
+  src.group as s -> tgt.group as t then MeasureReportGroup(s, t);
+  src.supplementalData -> tgt.supplementalData;
+  src.evaluatedResource -> tgt.evaluatedResource;
+}
+
+
+group MeasureReportGroup(source src, target tgt) extends BackboneElement {
+  src.linkId -> tgt.linkId;
+  src.code -> tgt.code;
+  src.subject -> tgt.subject;
+  src.population as s -> tgt.population as t then MeasureReportGroupPopulation(s, t);
+  src.measureScore -> tgt.measureScore;
+  src.stratifier as s -> tgt.stratifier as t then MeasureReportGroupStratifier(s, t);
+}
+
+
+group MeasureReportGroupPopulation(source src, target tgt) extends BackboneElement {
+  src.linkId -> tgt.linkId;
+  src.code -> tgt.code;
+  src.count -> tgt.count;
+  src.subjectResults -> tgt.subjectResults;
+  src.subjectReport -> tgt.subjectReport;
+  src.subjects -> tgt.subjects;
+}
+
+
+group MeasureReportGroupStratifier(source src, target tgt) extends BackboneElement {
+  src.linkId -> tgt.linkId;
+  src.code -> tgt.code;
+  src.stratum as s -> tgt.stratum as t then MeasureReportGroupStratifierStratum(s, t);
+}
+
+
+group MeasureReportGroupStratifierStratum(source src, target tgt) extends BackboneElement {
+  src.value -> tgt.value;
+  src.component as s -> tgt.component as t then MeasureReportGroupStratifierStratumComponent(s, t);
+  src.population as s -> tgt.population as t then MeasureReportGroupStratifierStratumPopulation(s, t);
+  src.measureScore -> tgt.measureScore;
+}
+
+
+group MeasureReportGroupStratifierStratumComponent(source src, target tgt) extends BackboneElement {
+  src.linkId -> tgt.linkId;
+  src.code -> tgt.code;
+  src.value -> tgt.value;
+}
+
+
+group MeasureReportGroupStratifierStratumPopulation(source src, target tgt) extends BackboneElement {
+  src.linkId -> tgt.linkId;
+  src.code -> tgt.code;
+  src.count -> tgt.count;
+  src.subjectResults -> tgt.subjectResults;
+  src.subjectReport -> tgt.subjectReport;
+  src.subjects -> tgt.subjects;
+}

@@ -1,0 +1,15 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/Ratio5to6'
+/// name = 'Ratio5to6'
+/// title = 'Ratio Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/Ratio" alias RatioR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/Ratio" alias RatioR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group Ratio(source src : RatioR5, target tgt : RatioR6) extends DataType <<type+>> {
+  src.numerator -> tgt.numerator;
+  src.denominator -> tgt.denominator;
+}

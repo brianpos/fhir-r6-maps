@@ -1,0 +1,48 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/ArtifactAssessment5to6'
+/// name = 'ArtifactAssessment5to6'
+/// title = 'ArtifactAssessment Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/ArtifactAssessment" alias ArtifactAssessmentR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/ArtifactAssessment" alias ArtifactAssessmentR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following source properties were not read:
+    ArtifactAssessment.content.informationType code[0..1]
+    ArtifactAssessment.content.relatedArtifact RelatedArtifact[0..*]
+*/
+/* The following target properties were not populated:
+    ArtifactAssessment.relatesTo BackboneElement[0..*]
+    ArtifactAssessment.relatesTo.type CodeableConcept[1..1]
+    ArtifactAssessment.relatesTo.target[x] uri,Attachment,canonical,Reference,markdown[1..1] (Resource,Resource)
+    ArtifactAssessment.content.relatesTo [0..*]
+*/
+group ArtifactAssessment(source src : ArtifactAssessmentR5, target tgt : ArtifactAssessmentR6) extends DomainResource <<type+>> {
+  src.identifier -> tgt.identifier;
+  src.title -> tgt.title;
+  src.citeAs : markdown -> tgt.citeAs;
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-ArtifactAssessment.citeAs') -> tgt.citeAs = (e.value) "xverCiteAsReference";
+// rule changed to Reference,markdown -> markdown
+// src.citeAs -> tgt.citeAs; // Warning: Source Type unsupported: Reference  (Reference,markdown -> markdown)
+  src.date -> tgt.date;
+  src.copyright -> tgt.copyright;
+  src.approvalDate -> tgt.approvalDate;
+  src.lastReviewDate -> tgt.lastReviewDate;
+  src.artifact -> tgt.artifact;
+  src.content as s -> tgt.content as t then ArtifactAssessmentContent(s, t);
+  src.workflowStatus -> tgt.workflowStatus;
+  src.disposition -> tgt.disposition;
+}
+
+
+group ArtifactAssessmentContent(source src, target tgt) extends BackboneElement {
+  src.summary -> tgt.summary;
+  src.type -> tgt.type;
+  src.classifier -> tgt.classifier;
+  src.quantity -> tgt.quantity;
+  src.author -> tgt.author;
+  src.path -> tgt.path;
+  src.freeToShare -> tgt.freeToShare;
+  src.component as s -> tgt.component as t then ArtifactAssessmentContent(s, t);
+}

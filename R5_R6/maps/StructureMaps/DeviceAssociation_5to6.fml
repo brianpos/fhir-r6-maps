@@ -1,0 +1,33 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/DeviceAssociation5to6'
+/// name = 'DeviceAssociation5to6'
+/// title = 'DeviceAssociation Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/DeviceAssociation" alias DeviceAssociationR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/DeviceAssociation" alias DeviceAssociationR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following source properties were not read:
+    DeviceAssociation.category CodeableConcept[0..*]
+    DeviceAssociation.operation BackboneElement[0..*]
+    DeviceAssociation.operation.status CodeableConcept[1..1]
+    DeviceAssociation.operation.operator Reference[0..*] (Patient,Practitioner,RelatedPerson)
+    DeviceAssociation.operation.period Period[0..1]
+*/
+/* The following target properties were not populated:
+    DeviceAssociation.relationship CodeableConcept[1..1]
+    DeviceAssociation.relationshipStatus CodeableConcept[0..1]
+    DeviceAssociation.focus Reference[0..1] (BiologicallyDerivedProduct,CareTeam,Device,Group,Location,Medication,NutritionProduct,Organization,Patient,Practitioner,PractitionerRole,RelatedPerson,Specimen,Substance)
+*/
+group DeviceAssociation(source src : DeviceAssociationR5, target tgt : DeviceAssociationR6) extends DomainResource <<type+>> {
+  src.identifier -> tgt.identifier;
+  src.device -> tgt.device;
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-DeviceAssociation.status') -> tgt.status = (e.value) "xverStatusCodeableConcept";
+// rule changed to CodeableConcept -> code
+// src.status -> tgt.status; // Warning: Source Type unsupported: CodeableConcept  (CodeableConcept -> code)
+  src.statusReason /* [0..*] */ -> tgt.statusReason /* [0..1] */; // Warning: source repeating, target single-valued
+  src.subject /* [0..1] */ -> tgt.subject /* [1..1] */; // Warning: source optional, target mandatory    Source TargetProfile unsupported: RelatedPerson  (Patient,Group,Practitioner,RelatedPerson,Device -> BiologicallyDerivedProduct,CareTeam,Device,Group,Location,Medication,NutritionProduct,Organization,Patient,Practitioner,PractitionerRole,Specimen,Substance)
+  src.bodyStructure -> tgt.bodyStructure;
+  src.period -> tgt.period;
+}

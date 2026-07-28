@@ -1,0 +1,57 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/AdministrableProductDefinition5to6'
+/// name = 'AdministrableProductDefinition5to6'
+/// title = 'AdministrableProductDefinition Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/AdministrableProductDefinition" alias AdministrableProductDefinitionR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/AdministrableProductDefinition" alias AdministrableProductDefinitionR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following target properties were not populated:
+    AdministrableProductDefinition.code Coding[0..*]
+*/
+group AdministrableProductDefinition(source src : AdministrableProductDefinitionR5, target tgt : AdministrableProductDefinitionR6) extends DomainResource <<type+>> {
+  src.identifier -> tgt.identifier;
+  src.status -> tgt.status;
+  src.formOf -> tgt.formOf;
+  src.administrableDoseForm -> tgt.administrableDoseForm;
+  src.unitOfPresentation -> tgt.unitOfPresentation;
+  src.producedFrom -> tgt.producedFrom;
+  src.ingredient -> tgt.ingredient;
+  src.device -> tgt.device;
+  src.description -> tgt.description;
+  src.property as s -> tgt.property as t then AdministrableProductDefinitionProperty(s, t);
+  src.routeOfAdministration as s -> tgt.routeOfAdministration as t then AdministrableProductDefinitionRouteOfAdministration(s, t);
+}
+
+
+group AdministrableProductDefinitionProperty(source src, target tgt) extends BackboneElement {
+  src.type -> tgt.type;
+  src.value -> tgt.value;
+  src.status -> tgt.status;
+}
+
+
+group AdministrableProductDefinitionRouteOfAdministration(source src, target tgt) extends BackboneElement {
+  src.code -> tgt.code;
+  src.firstDose -> tgt.firstDose;
+  src.maxSingleDose -> tgt.maxSingleDose;
+  src.maxDosePerDay -> tgt.maxDosePerDay;
+  src.maxDosePerTreatmentPeriod -> tgt.maxDosePerTreatmentPeriod;
+  src.maxTreatmentPeriod -> tgt.maxTreatmentPeriod;
+  src.targetSpecies as s -> tgt.targetSpecies as t then AdministrableProductDefinitionRouteOfAdministrationTargetSpecies(s, t);
+}
+
+
+group AdministrableProductDefinitionRouteOfAdministrationTargetSpecies(source src, target tgt) extends BackboneElement {
+  src.code -> tgt.code;
+  src.withdrawalPeriod as s -> tgt.withdrawalPeriod as t then AdministrableProductDefinitionRouteOfAdministrationTargetSpeciesWithdrawalPeriod(s, t);
+}
+
+
+group AdministrableProductDefinitionRouteOfAdministrationTargetSpeciesWithdrawalPeriod(source src, target tgt) extends BackboneElement {
+  src.tissue -> tgt.tissue;
+  src.value -> tgt.value;
+  src.supportingInformation -> tgt.supportingInformation;
+}

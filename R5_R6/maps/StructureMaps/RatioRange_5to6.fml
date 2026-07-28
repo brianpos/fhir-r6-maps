@@ -1,0 +1,16 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/RatioRange5to6'
+/// name = 'RatioRange5to6'
+/// title = 'RatioRange Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/RatioRange" alias RatioRangeR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/RatioRange" alias RatioRangeR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group RatioRange(source src : RatioRangeR5, target tgt : RatioRangeR6) extends DataType <<type+>> {
+  src.lowNumerator -> tgt.lowNumerator;
+  src.highNumerator -> tgt.highNumerator;
+  src.denominator -> tgt.denominator;
+}

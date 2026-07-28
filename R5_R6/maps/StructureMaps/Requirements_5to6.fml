@@ -1,0 +1,67 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/Requirements5to6'
+/// name = 'Requirements5to6'
+/// title = 'Requirements Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/Requirements" alias RequirementsR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/Requirements" alias RequirementsR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following source properties were not read:
+    Requirements.statement.parent string[0..1]
+*/
+/* The following target properties were not populated:
+    Requirements.imports BackboneElement[0..*]
+    Requirements.imports.reference canonical[1..1] (Requirements)
+    Requirements.imports.key id[0..*]
+    Requirements.actor.reference canonical[1..1] (ActorDefinition)
+    Requirements.actor.key id[0..1]
+    Requirements.statement.category Coding[0..*]
+    Requirements.statement.derivedFrom.reference canonical[0..1] (Requirements)
+    Requirements.statement.derivedFrom.key id[1..1]
+    Requirements.statement.partOf BackboneElement[0..1]
+    Requirements.statement.partOf.reference canonical[0..1] (Requirements)
+    Requirements.statement.partOf.key id[1..1]
+    Requirements.statement.actor id[0..*]
+*/
+group Requirements(source src : RequirementsR5, target tgt : RequirementsR6) extends DomainResource <<type+>> {
+  src.url -> tgt.url;
+  src.identifier -> tgt.identifier;
+  src.version -> tgt.version;
+  src.versionAlgorithm -> tgt.versionAlgorithm;
+  src.name -> tgt.name;
+  src.title -> tgt.title;
+  src.status -> tgt.status;
+  src.experimental -> tgt.experimental;
+  src.date -> tgt.date;
+  src.publisher -> tgt.publisher;
+  src.contact -> tgt.contact;
+  src.description -> tgt.description;
+  src.useContext -> tgt.useContext;
+  src.jurisdiction -> tgt.jurisdiction;
+  src.purpose -> tgt.purpose;
+  src.copyright -> tgt.copyright;
+  src.copyrightLabel -> tgt.copyrightLabel;
+  src.derivedFrom -> tgt.derivedFrom;
+  src.reference -> tgt.reference;
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-Requirements.actor') -> tgt.actor = (e.value) "xverActorCanonical";
+// rule changed to canonical -> BackboneElement
+// src.actor -> tgt.actor; // Warning: Source Type unsupported: canonical  (canonical -> BackboneElement)
+  src.statement as s -> tgt.statement as t then RequirementsStatement(s, t);
+}
+
+
+group RequirementsStatement(source src, target tgt) extends BackboneElement {
+  src.key -> tgt.key;
+  src.label -> tgt.label;
+  src.conformance -> tgt.conformance;
+  src.conditionality -> tgt.conditionality;
+  src.requirement -> tgt.requirement;
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-Requirements.statement.derivedFrom') -> tgt.derivedFrom = (e.value) "xverDerivedFromString";
+// rule changed to string -> BackboneElement
+// src.derivedFrom -> tgt.derivedFrom; // Warning: Source Type unsupported: string  (string -> BackboneElement)
+  src.satisfiedBy -> tgt.satisfiedBy;
+  src.reference -> tgt.reference;
+  src.source -> tgt.source;
+}

@@ -1,0 +1,94 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/Device5to6'
+/// name = 'Device5to6'
+/// title = 'Device Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/Device" alias DeviceR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/Device" alias DeviceR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following source properties were not read:
+    Device.displayName string[0..1]
+    Device.mode CodeableConcept[0..1]
+    Device.cycle Count[0..1]
+    Device.duration Duration[0..1]
+    Device.owner Reference[0..1] (Organization)
+    Device.url uri[0..1]
+    Device.endpoint Reference[0..*] (Endpoint)
+    Device.gateway CodeableReference[0..*] (Device)
+*/
+/* The following target properties were not populated:
+    Device.udiCarrier.deviceIdentifierSystem uri[0..1]
+    Device.additive BackboneElement[0..*]
+    Device.additive.type CodeableReference[1..1] (SubstanceDefinition,Substance)
+    Device.additive.quantity Quantity[0..1]
+*/
+group Device(source src : DeviceR5, target tgt : DeviceR6) extends DomainResource <<type+>> {
+  src.identifier -> tgt.identifier;
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-Device.definition') -> tgt.definition = (e.value) "xverDefinitionCodeableReference";
+// rule changed to CodeableReference -> canonical
+// src.definition -> tgt.definition; // Warning: Source Type unsupported: CodeableReference  (CodeableReference -> canonical)
+  src.udiCarrier as s -> tgt.udiCarrier as t then DeviceUdiCarrier(s, t);
+  src.status -> tgt.status;
+  src.availabilityStatus -> tgt.availabilityStatus;
+  src.biologicalSourceEvent -> tgt.biologicalSourceEvent;
+  src.manufacturer -> tgt.manufacturer;
+  src.manufactureDate -> tgt.manufactureDate;
+  src.expirationDate -> tgt.expirationDate;
+  src.lotNumber -> tgt.lotNumber;
+  src.serialNumber -> tgt.serialNumber;
+  src.name as s -> tgt.name as t then DeviceName(s, t);
+  src.modelNumber -> tgt.modelNumber;
+  src.partNumber -> tgt.partNumber;
+  src.category -> tgt.category;
+  src.type -> tgt.type;
+  src.version as s -> tgt.deviceVersion as t then DeviceVersion(s, t); // renamed
+  src.conformsTo as s -> tgt.conformsTo as t then DeviceConformsTo(s, t);
+  src.property as s -> tgt.property as t then DeviceProperty(s, t);
+  src.contact -> tgt.contact;
+  src.location -> tgt.location;
+  src.note -> tgt.note;
+  src.safety -> tgt.safety;
+  src.parent -> tgt.parent;
+}
+
+
+group DeviceUdiCarrier(source src, target tgt) extends BackboneElement {
+  src.deviceIdentifier -> tgt.deviceIdentifier;
+  src.issuer -> tgt.issuer;
+  src.jurisdiction -> tgt.jurisdiction;
+  src.carrierAIDC -> tgt.carrierAIDC;
+  src.carrierHRF -> tgt.carrierHRF;
+  src.entryType -> tgt.entryType;
+}
+
+
+group DeviceName(source src, target tgt) extends BackboneElement {
+  src.value -> tgt.value;
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-Device.name.type') -> tgt.type = (e.value) "xverTypeCode";
+// rule changed to code -> CodeableConcept
+// src.type -> tgt.type; // Warning: Source Type unsupported: code  (code -> CodeableConcept)
+  src.display -> tgt.display;
+}
+
+
+group DeviceVersion(source src, target tgt) extends BackboneElement {
+  src.type -> tgt.type; // renamed
+  src.component -> tgt.component; // renamed
+  src.installDate -> tgt.installDate; // renamed
+  src.value -> tgt.value; // renamed
+}
+
+
+group DeviceConformsTo(source src, target tgt) extends BackboneElement {
+  src.category -> tgt.category;
+  src.specification -> tgt.specification;
+  src.version -> tgt.version;
+}
+
+
+group DeviceProperty(source src, target tgt) extends BackboneElement {
+  src.type -> tgt.type;
+  src.value -> tgt.value;
+}

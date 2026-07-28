@@ -1,0 +1,20 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/ParameterDefinition5to6'
+/// name = 'ParameterDefinition5to6'
+/// title = 'ParameterDefinition Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/ParameterDefinition" alias ParameterDefinitionR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/ParameterDefinition" alias ParameterDefinitionR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group ParameterDefinition(source src : ParameterDefinitionR5, target tgt : ParameterDefinitionR6) extends DataType <<type+>> {
+  src.name -> tgt.name;
+  src.use -> tgt.use;
+  src.min -> tgt.min;
+  src.max -> tgt.max;
+  src.documentation -> tgt.documentation;
+  src.type -> tgt.type;
+  src.profile -> tgt.profile;
+}

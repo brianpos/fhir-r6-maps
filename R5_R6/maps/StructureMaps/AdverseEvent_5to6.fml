@@ -1,0 +1,92 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/AdverseEvent5to6'
+/// name = 'AdverseEvent5to6'
+/// title = 'AdverseEvent Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/AdverseEvent" alias AdverseEventR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/AdverseEvent" alias AdverseEventR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following source properties were not read:
+    AdverseEvent.contributingFactor.item[x] Reference,CodeableConcept[1..1] (Condition,Observation,AllergyIntolerance,FamilyMemberHistory,Immunization,Procedure,Device,DeviceUsage,DocumentReference,MedicationAdministration,MedicationStatement)
+    AdverseEvent.preventiveAction.item[x] Reference,CodeableConcept[1..1] (Immunization,Procedure,DocumentReference,MedicationAdministration,MedicationRequest)
+    AdverseEvent.mitigatingAction.item[x] Reference,CodeableConcept[1..1] (Procedure,DocumentReference,MedicationAdministration,MedicationRequest)
+    AdverseEvent.supportingInfo.item[x] Reference,CodeableConcept[1..1] (Condition,Observation,AllergyIntolerance,FamilyMemberHistory,Immunization,Procedure,DocumentReference,MedicationAdministration,MedicationStatement,QuestionnaireResponse)
+*/
+/* The following target properties were not populated:
+    AdverseEvent.suspectEntity.occurrence[x] dateTime,Period[0..1]
+    AdverseEvent.contributingFactor.concept CodeableConcept[0..1]
+    AdverseEvent.contributingFactor.reference Reference[0..1]
+    AdverseEvent.preventiveAction.concept CodeableConcept[0..1]
+    AdverseEvent.preventiveAction.reference Reference[0..1]
+    AdverseEvent.mitigatingAction.concept CodeableConcept[0..1]
+    AdverseEvent.mitigatingAction.reference Reference[0..1]
+    AdverseEvent.supportingInfo.concept CodeableConcept[0..1]
+    AdverseEvent.supportingInfo.reference Reference[0..1]
+*/
+group AdverseEvent(source src : AdverseEventR5, target tgt : AdverseEventR6) extends DomainResource <<type+>> {
+  src.identifier -> tgt.identifier;
+  src.status -> tgt.status;
+  src.actuality -> tgt.actuality;
+  src.category -> tgt.category;
+  src.code -> tgt.code;
+  src.subject -> tgt.subject; // Warning: Source TargetProfile unsupported: ResearchSubject  (Patient,Group,Practitioner,RelatedPerson,ResearchSubject -> Patient,Group,Practitioner,RelatedPerson)
+  src.encounter -> tgt.encounter;
+  src.occurrence : dateTime -> tgt.effect;
+  src.occurrence : Period -> tgt.effect;
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-AdverseEvent.effect[x]') -> tgt.effect = (e.value) "xverOccurrenceTiming";
+// rule changed to dateTime,Period,Timing -> dateTime,Period
+// src.occurrence -> tgt.effect; // renamed // Warning: Source Type unsupported: Timing  (dateTime,Period,Timing -> dateTime,Period)
+  src.detected -> tgt.detected;
+  src.recordedDate -> tgt.recordedDate;
+  src.resultingEffect -> tgt.resultingEffect;
+  src.location -> tgt.location;
+  src.seriousness -> tgt.seriousness;
+  src.outcome -> tgt.outcome;
+  src.recorder -> tgt.recorder; // Warning: Source TargetProfile unsupported: ResearchSubject  (Patient,Practitioner,PractitionerRole,RelatedPerson,ResearchSubject -> Patient,Practitioner,PractitionerRole,RelatedPerson)
+  src.participant as s -> tgt.participant as t then AdverseEventParticipant(s, t);
+  src.study -> tgt.study;
+  src.expectedInResearchStudy -> tgt.expectedInResearchStudy;
+  src.suspectEntity as s -> tgt.suspectEntity as t then AdverseEventSuspectEntity(s, t);
+  src.contributingFactor as s -> tgt.contributingFactor as t then AdverseEventContributingFactor(s, t); // Warning: type changed (BackboneElement -> CodeableReference)
+  src.preventiveAction as s -> tgt.preventiveAction as t then AdverseEventPreventiveAction(s, t); // Warning: type changed (BackboneElement -> CodeableReference)
+  src.mitigatingAction as s -> tgt.mitigatingAction as t then AdverseEventMitigatingAction(s, t); // Warning: type changed (BackboneElement -> CodeableReference)
+  src.supportingInfo as s -> tgt.supportingInfo as t then AdverseEventSupportingInfo(s, t); // Warning: type changed (BackboneElement -> CodeableReference)
+  src.note -> tgt.note;
+}
+
+
+group AdverseEventParticipant(source src, target tgt) extends BackboneElement {
+  src.function -> tgt.function;
+  src.actor -> tgt.actor; // Warning: Source TargetProfile unsupported: ResearchSubject  (Practitioner,PractitionerRole,Organization,CareTeam,Patient,Device,RelatedPerson,ResearchSubject -> Practitioner,PractitionerRole,Organization,CareTeam,Patient,Device,RelatedPerson,Group)
+}
+
+
+group AdverseEventSuspectEntity(source src, target tgt) extends BackboneElement {
+  src.instance -> tgt.instance;
+  src.causality as s -> tgt.causality as t then AdverseEventSuspectEntityCausality(s, t);
+}
+
+
+group AdverseEventSuspectEntityCausality(source src, target tgt) extends BackboneElement {
+  src.assessmentMethod -> tgt.assessmentMethod;
+  src.entityRelatedness -> tgt.entityRelatedness;
+  src.author -> tgt.author; // Warning: Source TargetProfile unsupported: ResearchSubject  (Practitioner,PractitionerRole,Patient,RelatedPerson,ResearchSubject -> Practitioner,PractitionerRole,Patient,RelatedPerson)
+}
+
+
+group AdverseEventContributingFactor(source src, target tgt) extends BackboneElement {
+}
+
+
+group AdverseEventPreventiveAction(source src, target tgt) extends BackboneElement {
+}
+
+
+group AdverseEventMitigatingAction(source src, target tgt) extends BackboneElement {
+}
+
+
+group AdverseEventSupportingInfo(source src, target tgt) extends BackboneElement {
+}

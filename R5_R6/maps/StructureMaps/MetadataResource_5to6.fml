@@ -1,0 +1,26 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/MetadataResource5to6'
+/// name = 'MetadataResource5to6'
+/// title = 'MetadataResource Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/MetadataResource" alias MetadataResourceR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/MetadataResource" alias MetadataResourceR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following source properties were not read:
+    MetadataResource.topic CodeableConcept[0..*]
+*/
+/* The following target properties were not populated:
+    MetadataResource.usage markdown[0..1]
+*/
+group MetadataResource(source src : MetadataResourceR5, target tgt : MetadataResourceR6) extends DomainResource <<type+>> {
+  src.approvalDate -> tgt.approvalDate;
+  src.lastReviewDate -> tgt.lastReviewDate;
+  src.effectivePeriod -> tgt.effectivePeriod;
+  src.author -> tgt.author;
+  src.editor -> tgt.editor;
+  src.reviewer -> tgt.reviewer;
+  src.endorser -> tgt.endorser;
+  src.relatedArtifact -> tgt.relatedArtifact;
+}

@@ -1,0 +1,91 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/ClinicalUseDefinition5to6'
+/// name = 'ClinicalUseDefinition5to6'
+/// title = 'ClinicalUseDefinition Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/ClinicalUseDefinition" alias ClinicalUseDefinitionR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/ClinicalUseDefinition" alias ClinicalUseDefinitionR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following target properties were not populated:
+    ClinicalUseDefinition.undesirableEffect.management CodeableConcept[0..*]
+    ClinicalUseDefinition.indication.otherTherapy.relationshipType CodeableConcept[1..1]
+    ClinicalUseDefinition.indication.otherTherapy.treatment CodeableReference[1..1] (MedicinalProductDefinition,Medication,SubstanceDefinition,NutritionProduct,BiologicallyDerivedProduct,ActivityDefinition)
+    ClinicalUseDefinition.contraindication.management CodeableConcept[0..*]
+    ClinicalUseDefinition.interaction.interactant.route CodeableConcept[0..1]
+    ClinicalUseDefinition.interaction.severity CodeableConcept[0..1]
+*/
+group ClinicalUseDefinition(source src : ClinicalUseDefinitionR5, target tgt : ClinicalUseDefinitionR6) extends DomainResource <<type+>> {
+  src.identifier -> tgt.identifier;
+  src.type -> tgt.type;
+  src.category -> tgt.category;
+  src.subject /* [0..*] */ -> tgt.subject /* [1..*] */; // Warning: source optional, target mandatory    Source TargetProfile unsupported: Substance  (MedicinalProductDefinition,Medication,ActivityDefinition,PlanDefinition,Device,DeviceDefinition,Substance,NutritionProduct,BiologicallyDerivedProduct -> MedicinalProductDefinition,Medication,ActivityDefinition,PlanDefinition,Device,DeviceDefinition,SubstanceDefinition,NutritionProduct,BiologicallyDerivedProduct)
+  src.status -> tgt.status;
+  src.contraindication as s -> tgt.contraindication as t then ClinicalUseDefinitionContraindication(s, t);
+  src.indication as s -> tgt.indication as t then ClinicalUseDefinitionIndication(s, t);
+  src.interaction as s -> tgt.interaction as t then ClinicalUseDefinitionInteraction(s, t);
+  src.population -> tgt.population;
+  src.library -> tgt.library;
+  src.undesirableEffect as s -> tgt.undesirableEffect as t then ClinicalUseDefinitionUndesirableEffect(s, t);
+  src.warning as s -> tgt.warning as t then ClinicalUseDefinitionWarning(s, t);
+}
+
+
+group ClinicalUseDefinitionContraindication(source src, target tgt) extends BackboneElement {
+  src.diseaseSymptomProcedure -> tgt.diseaseSymptomProcedure;
+  src.diseaseStatus -> tgt.diseaseStatus;
+  src.comorbidity -> tgt.comorbidity;
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-ClinicalUseDefinition.contraindication.indication') -> tgt.indication = (e.value) "xverIndicationReference";
+// rule changed to Reference -> 
+// src.indication -> tgt.indication; // Warning: Source Type unsupported: Reference  (Reference -> )
+  src.applicability -> tgt.applicability;
+  src.otherTherapy as s -> tgt.otherTherapy as t then ClinicalUseDefinitionContraindicationOtherTherapy(s, t);
+}
+
+
+group ClinicalUseDefinitionContraindicationOtherTherapy(source src, target tgt) extends BackboneElement {
+  src.relationshipType -> tgt.relationshipType;
+  src.treatment -> tgt.treatment; // Warning: Source TargetProfile unsupported: Substance  (MedicinalProductDefinition,Medication,Substance,SubstanceDefinition,NutritionProduct,BiologicallyDerivedProduct,ActivityDefinition -> MedicinalProductDefinition,Medication,SubstanceDefinition,NutritionProduct,BiologicallyDerivedProduct,ActivityDefinition)
+}
+
+
+group ClinicalUseDefinitionIndication(source src, target tgt) extends BackboneElement {
+  src.diseaseSymptomProcedure -> tgt.diseaseSymptomProcedure;
+  src.diseaseStatus -> tgt.diseaseStatus;
+  src.comorbidity -> tgt.comorbidity;
+  src.intendedEffect -> tgt.intendedEffect;
+  src.duration -> tgt.duration;
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-ClinicalUseDefinition.indication.undesirableEffect') -> tgt.undesirableEffect = (e.value) "xverUndesirableEffectReference";
+// rule changed to Reference -> 
+// src.undesirableEffect -> tgt.undesirableEffect; // Warning: Source Type unsupported: Reference  (Reference -> )
+  src.applicability -> tgt.applicability;
+  src.otherTherapy as s -> tgt.otherTherapy as t then ClinicalUseDefinitionContraindicationOtherTherapy(s, t);
+}
+
+
+group ClinicalUseDefinitionInteraction(source src, target tgt) extends BackboneElement {
+  src.interactant as s -> tgt.interactant as t then ClinicalUseDefinitionInteractionInteractant(s, t);
+  src.type -> tgt.type;
+  src.effect -> tgt.effect;
+  src.incidence -> tgt.incidence;
+  src.management -> tgt.management;
+}
+
+
+group ClinicalUseDefinitionInteractionInteractant(source src, target tgt) extends BackboneElement {
+  src.item -> tgt.item; // Warning: Source TargetProfile unsupported: Substance  (MedicinalProductDefinition,Medication,Substance,NutritionProduct,BiologicallyDerivedProduct,ObservationDefinition -> MedicinalProductDefinition,Medication,SubstanceDefinition,NutritionProduct,BiologicallyDerivedProduct,ObservationDefinition)
+}
+
+
+group ClinicalUseDefinitionUndesirableEffect(source src, target tgt) extends BackboneElement {
+  src.symptomConditionEffect -> tgt.symptomConditionEffect;
+  src.classification -> tgt.classification;
+  src.frequencyOfOccurrence -> tgt.frequencyOfOccurrence;
+}
+
+
+group ClinicalUseDefinitionWarning(source src, target tgt) extends BackboneElement {
+  src.description -> tgt.description;
+  src.code -> tgt.code;
+}

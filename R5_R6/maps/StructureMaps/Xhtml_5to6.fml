@@ -1,0 +1,14 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/xhtml5to6'
+/// name = 'xhtml5to6'
+/// title = 'xhtml Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/xhtml" alias xhtmlR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/xhtml" alias xhtmlR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group Xhtml(source src : xhtmlR5, target tgt : xhtmlR6) extends Element <<type+>> {
+  src.value -> tgt.value;
+}

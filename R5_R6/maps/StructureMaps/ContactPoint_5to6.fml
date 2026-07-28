@@ -1,0 +1,18 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/ContactPoint5to6'
+/// name = 'ContactPoint5to6'
+/// title = 'ContactPoint Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/ContactPoint" alias ContactPointR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/ContactPoint" alias ContactPointR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group ContactPoint(source src : ContactPointR5, target tgt : ContactPointR6) extends DataType <<type+>> {
+  src.system -> tgt.system;
+  src.value -> tgt.value;
+  src.use -> tgt.use;
+  src.rank -> tgt.rank;
+  src.period -> tgt.period;
+}

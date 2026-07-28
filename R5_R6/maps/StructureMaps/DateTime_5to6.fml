@@ -1,0 +1,14 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/dateTime5to6'
+/// name = 'dateTime5to6'
+/// title = 'dateTime Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/dateTime" alias dateTimeR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/dateTime" alias dateTimeR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+
+group DateTime(source src : dateTimeR5, target tgt : dateTimeR6) extends PrimitiveType <<type+>> {
+  src.value -> tgt.value;
+}

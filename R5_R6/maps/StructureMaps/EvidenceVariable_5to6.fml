@@ -1,0 +1,114 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/EvidenceVariable5to6'
+/// name = 'EvidenceVariable5to6'
+/// title = 'EvidenceVariable Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/EvidenceVariable" alias EvidenceVariableR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/EvidenceVariable" alias EvidenceVariableR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following source properties were not read:
+    EvidenceVariable.relatedArtifact RelatedArtifact[0..*]
+    EvidenceVariable.characteristic BackboneElement[0..*]
+    EvidenceVariable.characteristic.linkId id[0..1]
+    EvidenceVariable.characteristic.description markdown[0..1]
+    EvidenceVariable.characteristic.note Annotation[0..*]
+    EvidenceVariable.characteristic.exclude boolean[0..1]
+    EvidenceVariable.characteristic.definitionReference Reference[0..1] (EvidenceVariable,Group,Evidence)
+    EvidenceVariable.characteristic.definitionCanonical canonical[0..1] (EvidenceVariable,Evidence)
+    EvidenceVariable.characteristic.definitionCodeableConcept CodeableConcept[0..1]
+    EvidenceVariable.characteristic.definitionExpression Expression[0..1]
+    EvidenceVariable.characteristic.definitionId id[0..1]
+    EvidenceVariable.characteristic.definitionByTypeAndValue BackboneElement[0..1]
+    EvidenceVariable.characteristic.definitionByTypeAndValue.type CodeableConcept[1..1]
+    EvidenceVariable.characteristic.definitionByTypeAndValue.method CodeableConcept[0..*]
+    EvidenceVariable.characteristic.definitionByTypeAndValue.device Reference[0..1] (Device,DeviceMetric)
+    EvidenceVariable.characteristic.definitionByTypeAndValue.value[x] CodeableConcept,boolean,Quantity,Range,Reference,id[1..1]
+    EvidenceVariable.characteristic.definitionByTypeAndValue.offset CodeableConcept[0..1]
+    EvidenceVariable.characteristic.definitionByCombination BackboneElement[0..1]
+    EvidenceVariable.characteristic.definitionByCombination.code code[1..1]
+    EvidenceVariable.characteristic.definitionByCombination.threshold positiveInt[0..1]
+    EvidenceVariable.characteristic.definitionByCombination.characteristic [1..*]
+    EvidenceVariable.characteristic.instances[x] Quantity,Range[0..1]
+    EvidenceVariable.characteristic.duration[x] Quantity,Range[0..1]
+    EvidenceVariable.characteristic.timeFromEvent BackboneElement[0..*]
+    EvidenceVariable.characteristic.timeFromEvent.description markdown[0..1]
+    EvidenceVariable.characteristic.timeFromEvent.note Annotation[0..*]
+    EvidenceVariable.characteristic.timeFromEvent.event[x] CodeableConcept,Reference,dateTime,id[0..1]
+    EvidenceVariable.characteristic.timeFromEvent.quantity Quantity[0..1]
+    EvidenceVariable.characteristic.timeFromEvent.range Range[0..1]
+*/
+/* The following target properties were not populated:
+    EvidenceVariable.citeAs markdown[0..1]
+    EvidenceVariable.recorder ContactDetail[0..*]
+    EvidenceVariable.relatesTo BackboneElement[0..*]
+    EvidenceVariable.relatesTo.type CodeableConcept[1..1]
+    EvidenceVariable.relatesTo.target[x] uri,Attachment,canonical,Reference,markdown[1..1] (Resource,Resource)
+    EvidenceVariable.definition CodeableReference[0..1] (Group)
+    EvidenceVariable.definitionModifier BackboneElement[0..*]
+    EvidenceVariable.definitionModifier.code CodeableConcept[1..1]
+    EvidenceVariable.definitionModifier.value[x] CodeableConcept,boolean,Quantity,Range,Period,RelativeTime,Reference,Expression,uri[1..1] (Resource)
+    EvidenceVariable.conditional Expression[0..1]
+    EvidenceVariable.classifier CodeableConcept[0..*]
+    EvidenceVariable.dataStorage BackboneElement[0..*]
+    EvidenceVariable.dataStorage.datatype CodeableConcept[0..1]
+    EvidenceVariable.dataStorage.path string[0..1]
+    EvidenceVariable.dataStorage.delimiter string[0..1]
+    EvidenceVariable.dataStorage.component [0..*]
+    EvidenceVariable.timing RelativeTime[0..1]
+    EvidenceVariable.period Period[0..1]
+    EvidenceVariable.constraint BackboneElement[0..*]
+    EvidenceVariable.constraint.conditional CodeableConcept[0..1]
+    EvidenceVariable.constraint.minimumQuantity Quantity[0..1]
+    EvidenceVariable.constraint.maximumQuantity Quantity[0..1]
+    EvidenceVariable.constraint.earliestDateTime dateTime[0..1]
+    EvidenceVariable.constraint.latestDateTime dateTime[0..1]
+    EvidenceVariable.constraint.minimumStringLength unsignedInt[0..1]
+    EvidenceVariable.constraint.maximumStringLength positiveInt[0..1]
+    EvidenceVariable.constraint.code CodeableConcept[0..1]
+    EvidenceVariable.constraint.expression Expression[0..1]
+    EvidenceVariable.constraint.expectedValueSet Reference[0..1] (ValueSet)
+    EvidenceVariable.constraint.expectedUnitsValueSet Reference[0..1] (ValueSet)
+    EvidenceVariable.constraint.anyValueAllowed boolean[0..1]
+    EvidenceVariable.missingDataMeaning CodeableConcept[0..*]
+    EvidenceVariable.unacceptableDataHandling CodeableConcept[0..*]
+*/
+group EvidenceVariable(source src : EvidenceVariableR5, target tgt : EvidenceVariableR6) extends DomainResource <<type+>> {
+  src.url -> tgt.url;
+  src.identifier -> tgt.identifier;
+  src.version -> tgt.version;
+  src.versionAlgorithm -> tgt.versionAlgorithm;
+  src.name -> tgt.name;
+  src.title -> tgt.title;
+  src.shortTitle -> tgt.shortTitle;
+  src.status -> tgt.status;
+  src.experimental -> tgt.experimental;
+  src.date -> tgt.date;
+  src.publisher -> tgt.publisher;
+  src.contact -> tgt.contact;
+  src.description -> tgt.description;
+  src.note -> tgt.note;
+  src.useContext -> tgt.useContext;
+  src.purpose -> tgt.purpose;
+  src.copyright -> tgt.copyright;
+  src.copyrightLabel -> tgt.copyrightLabel;
+  src.approvalDate -> tgt.approvalDate;
+  src.lastReviewDate -> tgt.lastReviewDate;
+  src.effectivePeriod -> tgt.effectivePeriod;
+  src.author -> tgt.author;
+  src.editor -> tgt.editor;
+  src.reviewer -> tgt.reviewer;
+  src.endorser -> tgt.endorser;
+  src.actual -> tgt.actual;
+  src.extension as e where (url = 'http://hl7.org/fhir/6.0/StructureDefinition/extension-EvidenceVariable.handling') -> tgt.handling = (e.value) "xverHandlingCode";
+// rule changed to code -> CodeableConcept
+// src.handling -> tgt.handling; // Warning: Source Type unsupported: code  (code -> CodeableConcept)
+  src.category as s -> tgt.category as t then EvidenceVariableCategory(s, t);
+}
+
+
+group EvidenceVariableCategory(source src, target tgt) extends BackboneElement {
+  src.name -> tgt.name;
+  src.value -> tgt.value;
+}

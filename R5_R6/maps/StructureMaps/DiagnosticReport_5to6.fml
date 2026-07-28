@@ -1,0 +1,53 @@
+/// url = 'http://hl7.org/fhir/uv/xver/StructureMap/DiagnosticReport5to6'
+/// name = 'DiagnosticReport5to6'
+/// title = 'DiagnosticReport Transforms: R5 to R6'
+/// status = 'draft'
+
+uses "http://hl7.org/fhir/5.0/StructureDefinition/DiagnosticReport" alias DiagnosticReportR5 as source
+uses "http://hl7.org/fhir/6.0/StructureDefinition/DiagnosticReport" alias DiagnosticReportR6 as target
+
+imports "http://hl7.org/fhir/uv/xver/StructureMap/*5to6"
+
+/* The following target properties were not populated:
+    DiagnosticReport.statusReason CodeableConcept[0..1]
+    DiagnosticReport.relatesTo RelatedArtifact[0..*]
+    DiagnosticReport.procedure Reference[0..*] (Procedure)
+    DiagnosticReport.recommendation CodeableReference[0..*] (ServiceRequest,CommunicationRequest,NutritionOrder,CarePlan,Appointment,DeviceRequest,RequestOrchestration,VisionPrescription)
+    DiagnosticReport.communication Reference[0..*] (Communication)
+    DiagnosticReport.comparison Reference[0..1] (List)
+*/
+group DiagnosticReport(source src : DiagnosticReportR5, target tgt : DiagnosticReportR6) extends DomainResource <<type+>> {
+  src.identifier -> tgt.identifier;
+  src.basedOn -> tgt.basedOn; // Warning: Source TargetProfile unsupported: ImmunizationRecommendation  (CarePlan,ImmunizationRecommendation,MedicationRequest,NutritionOrder,ServiceRequest -> CarePlan,MedicationRequest,NutritionOrder,ServiceRequest)
+  src.status -> tgt.status;
+  src.category -> tgt.category;
+  src.code -> tgt.code;
+  src.subject -> tgt.subject;
+  src.encounter -> tgt.encounter;
+  src.effective -> tgt.effective;
+  src.issued -> tgt.issued;
+  src.performer -> tgt.performer;
+  src.resultsInterpreter -> tgt.resultsInterpreter;
+  src.specimen -> tgt.specimen;
+  src.result -> tgt.result;
+  src.note -> tgt.note;
+  src.study -> tgt.study; // Warning: Source TargetProfile unsupported: GenomicStudy  (GenomicStudy,ImagingStudy -> ImagingStudy)
+  src.supportingInfo as s -> tgt.supportingInfo as t then DiagnosticReportSupportingInfo(s, t);
+  src.media as s -> tgt.media as t then DiagnosticReportMedia(s, t);
+  src.composition -> tgt.composition;
+  src.conclusion -> tgt.conclusion;
+  src.conclusionCode -> tgt.conclusionCode;
+  src.presentedForm -> tgt.presentedForm;
+}
+
+
+group DiagnosticReportSupportingInfo(source src, target tgt) extends BackboneElement {
+  src.type -> tgt.type;
+  src.reference -> tgt.reference; // Warning: Source TargetProfile unsupported: Citation  (Procedure,Observation,DiagnosticReport,Citation -> ImagingStudy,Procedure,Observation,DiagnosticReport,FamilyMemberHistory,AllergyIntolerance,Condition,DocumentReference)
+}
+
+
+group DiagnosticReportMedia(source src, target tgt) extends BackboneElement {
+  src.comment -> tgt.comment;
+  src.link -> tgt.link;
+}
