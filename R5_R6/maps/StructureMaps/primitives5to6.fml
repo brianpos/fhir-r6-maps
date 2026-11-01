@@ -286,7 +286,7 @@ group code2CodeableConcept(source src : codeR5, target tgt : CodeableConceptR6, 
 }
 
 group code2CodeableConceptRaw(source src : codeR5, target tgt : CodeableConceptR6) extends Element <<types>> {
-  src.value as s ->  tgt.coding as t,  t.system = sysUrl,  t.code = s;
+  src.value as s ->  tgt.coding as t,  t.code = s;
 }
 
 group string2CodeableConcept(source src : stringR5, target tgt : CodeableConceptR6) extends Element <<types>> {
